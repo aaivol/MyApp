@@ -33,25 +33,79 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import com.example.myapp.ui.navigation.NavigationDestination
+import com.example.myapp.ui.signup.SignUpDestination
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.login
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
 
-/*
+
 object LoginDestination : NavigationDestination {
     override val route = "login"
     override val titleRes = R.string.app_name
 }
-*/
+
 
 //LOGIN SCREEN
 @Composable
 fun LoginScreen(
-    //navigation
+    navController: NavController
     //viewmodel
 ) {
-    LoginBody()
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        LoginText()
+        Column (
+            modifier = Modifier
+                .padding(top = 50.dp)
+                .background(Color.White),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Input("никнейм")
+            Input("пароль")
+
+            OutlinedButton(
+                onClick = {},
+                border = BorderStroke(2.dp, borderBlue),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                ),
+                modifier = Modifier
+                    .padding(top = 50.dp) // margin
+                    .fillMaxWidth(0.8f)
+                    .height(110.dp)
+                    .padding(20.dp) //margin
+            ) {
+                Text(
+                    "Вперед!",
+                    color = textBlue,
+                    fontSize = 20.sp
+                )
+            }
+
+            TextButton(
+                onClick = {
+                      navController.navigate(SignUpDestination.route)
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+            ) {
+                Text(
+                    "Еще нет аккаунта? Создать",
+                    color = textAccent,
+                    fontSize = 16.sp
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -71,8 +125,41 @@ fun LoginBody(
         ) {
             Input("никнейм")
             Input("пароль")
-            LoginButton()
-            SignUpButton()
+
+            OutlinedButton(
+                onClick = {},
+                border = BorderStroke(2.dp, borderBlue),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                ),
+                modifier = Modifier
+                    .padding(top = 50.dp) // margin
+                    .fillMaxWidth(0.8f)
+                    .height(110.dp)
+                    .padding(20.dp) //margin
+            ) {
+                Text(
+                    "Вперед!",
+                    color = textBlue,
+                    fontSize = 20.sp
+                )
+            }
+
+            TextButton(
+                onClick = {
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+            ) {
+                Text(
+                    "Еще нет аккаунта? Создать",
+                    color = textAccent,
+                    fontSize = 16.sp
+                )
+            }
         }
     }
 }
@@ -119,46 +206,6 @@ fun LoginText() {
             .background(login)
             .padding(horizontal = 60.dp, vertical = 50.dp) //padding
     )
-}
-
-@Composable
-fun LoginButton() {
-    OutlinedButton(
-        onClick = {},
-        border = BorderStroke(2.dp, borderBlue),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.White,
-        ),
-        modifier = Modifier
-            .padding(top = 50.dp) // margin
-            .fillMaxWidth(0.8f)
-            .height(110.dp)
-            .padding(20.dp) //margin
-    ) {
-        Text(
-            "Вперед!",
-            color = textBlue,
-            fontSize = 20.sp
-        )
-    }
-}
-
-@Composable
-fun SignUpButton() {
-    TextButton(
-        onClick = {},
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.White,
-        ),
-        modifier = Modifier
-            .fillMaxWidth(0.8f)
-    ) {
-        Text(
-            "Еще нет аккаунта? Создать",
-            color = textAccent,
-            fontSize = 16.sp
-        )
-    }
 }
 
 

@@ -34,25 +34,64 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import com.example.myapp.ui.goal.DietGoalDestination
+import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.login
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
 
-/*
+
 object SignUpDestination : NavigationDestination {
     override val route = "signup"
     override val titleRes = R.string.app_name
 }
-*/
+
 
 //SIGN UP SCREEN
 @Composable
 fun SignUpScreen(
-    //navigation
+    navController: NavController
     //viewmodel
 ) {
-    SignUpBody()
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        SignUpText()
+        Column (
+            modifier = Modifier
+                .padding(top = 50.dp)
+                .background(Color.White),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Input("никнейм")
+            Input("пароль")
+
+            OutlinedButton(
+                onClick = {
+                      navController.navigate(DietGoalDestination.route)
+                },
+                border = BorderStroke(2.dp, borderBlue),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                ),
+                modifier = Modifier
+                    .padding(top = 50.dp) // margin
+                    .fillMaxWidth(0.8f)
+                    .height(110.dp)
+                    .padding(20.dp) //margin
+            ) {
+                Text(
+                    "Создать аккаунт!",
+                    color = textBlue,
+                    fontSize = 20.sp
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -72,7 +111,25 @@ fun SignUpBody(
         ) {
             Input("никнейм")
             Input("пароль")
-            SignUpButton()
+
+            OutlinedButton(
+                onClick = {},
+                border = BorderStroke(2.dp, borderBlue),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                ),
+                modifier = Modifier
+                    .padding(top = 50.dp) // margin
+                    .fillMaxWidth(0.8f)
+                    .height(110.dp)
+                    .padding(20.dp) //margin
+            ) {
+                Text(
+                    "Создать аккаунт!",
+                    color = textBlue,
+                    fontSize = 20.sp
+                )
+            }
         }
     }
 }
@@ -103,7 +160,7 @@ fun Input(message: String) {
             .fillMaxWidth(0.8f)
             .height(110.dp)
             .padding(20.dp) //padding
-            .border(2.dp, borderBlue, RoundedCornerShape(0.dp))
+            .border(2.dp, borderBlue, RoundedCornerShape(60.dp))
     )
 }
 
@@ -119,28 +176,6 @@ fun SignUpText() {
             .background(login)
             .padding(horizontal = 60.dp, vertical = 50.dp) //padding
     )
-}
-
-@Composable
-fun SignUpButton() {
-    OutlinedButton(
-        onClick = {},
-        border = BorderStroke(2.dp, borderBlue),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.White,
-        ),
-        modifier = Modifier
-            .padding(top = 50.dp) // margin
-            .fillMaxWidth(0.8f)
-            .height(110.dp)
-            .padding(20.dp) //margin
-    ) {
-        Text(
-            "Создать аккаунт!",
-            color = textBlue,
-            fontSize = 20.sp
-        )
-    }
 }
 
 

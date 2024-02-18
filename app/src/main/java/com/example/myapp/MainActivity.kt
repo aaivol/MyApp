@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.myapp.ui.goal.DietGoalScreen
 import com.example.myapp.ui.login.LoginScreen
+import com.example.myapp.ui.navigation.MyAppNavHost
 import com.example.myapp.ui.theme.MyAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DietGoalScreen()
+                    MyAppNavHost()
                 }
             }
         }

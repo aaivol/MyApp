@@ -40,6 +40,8 @@ import com.example.myapp.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavController
+import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.login
 import com.example.myapp.ui.theme.orange
@@ -47,17 +49,17 @@ import com.example.myapp.ui.theme.page
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
 
-/*
+
 object DietGoalDestination : NavigationDestination {
     override val route = "diets"
     override val titleRes = R.string.app_name
 }
-*/
+
 
 //CHOOSE DIET GOAL SCREEN
 @Composable
 fun DietGoalScreen(
-    //navigation
+    navController: NavController
     //viewmodel
 ) {
     DietGoalBody()
@@ -145,8 +147,7 @@ fun DietGoalButtons() {
 @Composable
 fun DoneButton() {
     OutlinedButton(
-        onClick = {
-        },
+        onClick = {},
         border = BorderStroke(2.dp, borderBlue),
         colors = ButtonDefaults.buttonColors(
             containerColor = orange,
