@@ -58,7 +58,6 @@ object DietGoalDestination : NavigationDestination {
     override val titleRes = R.string.app_name
 }
 
-
 //CHOOSE DIET GOAL SCREEN
 @Composable
 fun DietGoalScreen(
@@ -77,41 +76,6 @@ fun DietGoalScreen(
         OutlinedButton(
             onClick = {
                 navController.navigate(HomeDestination.route)
-            },
-            border = BorderStroke(1.dp, borderBlue),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = orange,
-            ),
-            modifier = Modifier
-                .padding(top = 100.dp) // margin
-                .fillMaxWidth(0.9f)
-                .height(100.dp)
-                .padding(10.dp) //padding
-        ) {
-            Text(
-                text = "Далее",
-                color = textBlue,
-                fontSize = 20.sp
-            )
-        }
-    }
-}
-
-@Composable
-fun DietGoalBody(
-) {
-    Column(
-        modifier = Modifier
-            .background(page)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        DietGoalText()
-        DietGoalButtons()
-
-        OutlinedButton(
-            onClick = {
-                //navigate-to-filters
             },
             border = BorderStroke(1.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
@@ -192,6 +156,43 @@ fun DietGoalButtons() {
                     fontSize = 18.sp
                 )
             }
+        }
+    }
+}
+
+
+// FOR PREVIEW
+@Composable
+fun DietGoalBody(
+) {
+    Column(
+        modifier = Modifier
+            .background(page)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        DietGoalText()
+        DietGoalButtons()
+
+        OutlinedButton(
+            onClick = {
+                //navigate-to-filters
+            },
+            border = BorderStroke(1.dp, borderBlue),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = orange,
+            ),
+            modifier = Modifier
+                .padding(top = 100.dp) // margin
+                .fillMaxWidth(0.9f)
+                .height(100.dp)
+                .padding(10.dp) //padding
+        ) {
+            Text(
+                text = "Далее",
+                color = textBlue,
+                fontSize = 20.sp
+            )
         }
     }
 }
