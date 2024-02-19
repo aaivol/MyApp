@@ -1,11 +1,10 @@
 package com.example.myapp.ui
 
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.myapp.Dependencies
+import com.example.myapp.MyApp
 import com.example.myapp.ui.signup.SignUpViewModel
 
 /**
@@ -24,7 +23,7 @@ object AppViewModelProvider {
 
 /**
  * Extension function to queries for [Application] object and returns an instance of
- * [Dependencies].
+ * [MyApp].
  */
-fun CreationExtras.dependencies(): Dependencies =
-    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Dependencies)
+fun CreationExtras.dependencies(): MyApp =
+    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MyApp)

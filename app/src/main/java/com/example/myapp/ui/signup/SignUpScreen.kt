@@ -23,6 +23,7 @@ import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -34,7 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.goal.DietGoalDestination
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.theme.borderBlue
@@ -42,6 +45,7 @@ import com.example.myapp.ui.theme.login
 import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
+import kotlinx.coroutines.launch
 
 
 object SignUpDestination : NavigationDestination {
@@ -53,50 +57,34 @@ object SignUpDestination : NavigationDestination {
 //SIGN UP SCREEN
 @Composable
 fun SignUpScreen(
-    navController: NavController
-    //viewmodel
+    navController: NavController,
+    viewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        SignUpText()
-        Column (
-            modifier = Modifier
-                .padding(top = 50.dp)
-                .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Input("никнейм")
-            Input("пароль")
-
-            OutlinedButton(
-                onClick = {
-                      navController.navigate(DietGoalDestination.route)
-                },
-                border = BorderStroke(2.dp, borderBlue),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                modifier = Modifier
-                    .padding(top = 50.dp) // margin
-                    .fillMaxWidth(0.8f)
-                    .height(110.dp)
-                    .padding(20.dp) //margin
-            ) {
-                Text(
-                    "Создать аккаунт!",
-                    color = textBlue,
-                    fontSize = 20.sp
-                )
+        SignUpBody(
+            userUiState = viewModel.userUiState,
+            onUserValueChange = viewModel::updateUiState,
+            onCreateClick = {
+                coroutineScope.launch {
+                    viewModel.saveUser()
+                }
             }
-        }
+        )
+
     }
 }
 
 @Composable
 fun SignUpBody(
+    userUiState: UserUiState,
+    onUserValueChange: (UserDetails) -> Unit,
+    onCreateClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -104,17 +92,16 @@ fun SignUpBody(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         SignUpText()
-        Column (
-            modifier = Modifier
-                .padding(top = 50.dp)
-                .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Input("никнейм")
-            Input("пароль")
+        Column() {
+            InputUserData(
+                userDetails = userUiState.userDetails,
+                onValueChange = onUserValueChange,
+                nameMessage = "никнейм",
+                passwMessage = "пароль"
+            )
 
             OutlinedButton(
-                onClick = {},
+                onClick = onCreateClick,
                 border = BorderStroke(2.dp, borderBlue),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
@@ -137,32 +124,68 @@ fun SignUpBody(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Input(message: String) {
-    var text by rememberSaveable { mutableStateOf("") }
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        label = { Text(
-            "Придумайте $message",
-            fontSize = 18.sp,
-            color = textBlue
-        ) },
-        visualTransformation = PasswordVisualTransformation(),
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.White,
-            disabledTextColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent
-        ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+fun InputUserData(
+    userDetails: UserDetails,
+    onValueChange: (UserDetails) -> Unit = {},
+    nameMessage: String,
+    passwMessage: String
+) {
+    Column (
         modifier = Modifier
-            .padding(top = 10.dp) // margin
-            .fillMaxWidth(0.8f)
-            .height(110.dp)
-            .padding(20.dp) //padding
-            .border(2.dp, borderBlue, RoundedCornerShape(60.dp))
-    )
+            .padding(top = 50.dp)
+            .background(Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        TextField(
+            value = userDetails.username,
+            onValueChange = { onValueChange(userDetails.copy(username = it)) },
+            label = { Text(
+                "Придумайте $nameMessage",
+                fontSize = 18.sp,
+                color = textBlue
+            ) },
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.White,
+                disabledTextColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            modifier = Modifier
+                .padding(top = 10.dp) // margin
+                .fillMaxWidth(0.8f)
+                .height(110.dp)
+                .padding(20.dp) //padding
+                .border(2.dp, borderBlue, RoundedCornerShape(60.dp))
+        )
+
+        TextField(
+            value = userDetails.password,
+            onValueChange = { onValueChange(userDetails.copy(password = it)) },
+            label = { Text(
+                "Придумайте $passwMessage",
+                fontSize = 18.sp,
+                color = textBlue
+            ) },
+            visualTransformation = PasswordVisualTransformation(),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.White,
+                disabledTextColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            modifier = Modifier
+                .padding(top = 10.dp) // margin
+                .fillMaxWidth(0.8f)
+                .height(110.dp)
+                .padding(20.dp) //padding
+                .border(2.dp, borderBlue, RoundedCornerShape(60.dp))
+        )
+    }
+
 }
 
 @Composable
@@ -183,5 +206,11 @@ fun SignUpText() {
 @Preview(showBackground = true)
 @Composable
 fun SignUpBodyPreview() {
-    SignUpBody()
+    SignUpBody(
+        userUiState = UserUiState(
+            UserDetails(
+                    username = "pivk1", password = "1234", dietKey = "1"
+            )
+        ), onUserValueChange = {}, onCreateClick = {}
+    )
 }

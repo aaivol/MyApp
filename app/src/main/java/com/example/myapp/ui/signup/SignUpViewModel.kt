@@ -38,7 +38,7 @@ class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
 
     private fun validateInput(uiState: UserDetails = userUiState.userDetails): Boolean {
         return with(uiState) {
-            username.isNotBlank() && password.isNotBlank() && dietKey.isNotBlank()
+            username.isNotBlank() && password.isNotBlank()
         }
     }
 }

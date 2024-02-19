@@ -4,7 +4,7 @@ import android.app.Application
 import com.example.myapp.data.AppContainer
 import com.example.myapp.data.AppDataContainer
 
-class Dependencies : Application() {
+class MyApp : Application() {
     /**
      * AppContainer instance used by the rest of classes to obtain dependencies
      */
