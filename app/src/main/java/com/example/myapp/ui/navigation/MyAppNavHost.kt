@@ -8,8 +8,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.myapp.ui.filters.FiltersDestination
+import com.example.myapp.ui.filters.FiltersScreen
 import com.example.myapp.ui.goal.DietGoalDestination
 import com.example.myapp.ui.goal.DietGoalScreen
+import com.example.myapp.ui.home.HomeDestination
+import com.example.myapp.ui.home.HomeScreen
 import com.example.myapp.ui.login.LoginScreen
 import com.example.myapp.ui.login.LoginDestination
 import com.example.myapp.ui.signup.SignUpDestination
@@ -34,6 +38,12 @@ fun MyAppNavHost() {
         }
         composable(route = DietGoalDestination.route) {
             DietGoalScreen(navController)
+        }
+        composable(route = FiltersDestination.route) {
+            FiltersScreen(navController)
+        }
+        composable(route = HomeDestination.route) {
+            HomeScreen(navController)
         }
     }
 }

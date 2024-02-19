@@ -39,6 +39,7 @@ import com.example.myapp.ui.goal.DietGoalDestination
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.login
+import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
 
@@ -173,7 +174,7 @@ fun SignUpText() {
             .padding(0.dp) //margin
             .fillMaxWidth()
             .fillMaxHeight(0.3f)
-            .background(login)
+            .background(orange)
             .padding(horizontal = 60.dp, vertical = 50.dp) //padding
     )
 }

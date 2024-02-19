@@ -1,4 +1,4 @@
-package com.example.myapp.ui.goal
+package com.example.myapp.ui.filters
 
 import android.text.Layout
 import androidx.compose.foundation.BorderStroke
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonDefaults
@@ -39,10 +40,9 @@ import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
-import com.example.myapp.ui.filters.FiltersDestination
-import com.example.myapp.ui.filters.FiltersScreen
 import com.example.myapp.ui.home.HomeDestination
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.theme.borderBlue
@@ -52,16 +52,15 @@ import com.example.myapp.ui.theme.page
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
 
-
-object DietGoalDestination : NavigationDestination {
-    override val route = "diets"
+object FiltersDestination : NavigationDestination {
+    override val route = "filters"
     override val titleRes = R.string.app_name
 }
 
 
-//CHOOSE DIET GOAL SCREEN
+//FILTERS SCREEN
 @Composable
-fun DietGoalScreen(
+fun FiltersScreen(
     navController: NavController
     //viewmodel
 ) {
@@ -71,19 +70,18 @@ fun DietGoalScreen(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        DietGoalText()
+        FiltersText()
         DietGoalButtons()
-
         OutlinedButton(
             onClick = {
-                navController.navigate(HomeDestination.route)
+                //navController.navigate(HomeDestination.route)
             },
             border = BorderStroke(1.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
                 containerColor = orange,
             ),
             modifier = Modifier
-                .padding(top = 100.dp) // margin
+                .padding(top = 10.dp) // margin
                 .fillMaxWidth(0.9f)
                 .height(100.dp)
                 .padding(10.dp) //padding
@@ -98,7 +96,7 @@ fun DietGoalScreen(
 }
 
 @Composable
-fun DietGoalBody(
+fun FiltersBody(
 ) {
     Column(
         modifier = Modifier
@@ -106,19 +104,18 @@ fun DietGoalBody(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        DietGoalText()
+        FiltersText()
         DietGoalButtons()
-
         OutlinedButton(
             onClick = {
-                //navigate-to-filters
+                //navigate-to-home
             },
             border = BorderStroke(1.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
                 containerColor = orange,
             ),
             modifier = Modifier
-                .padding(top = 100.dp) // margin
+                .padding(top = 10.dp) // margin
                 .fillMaxWidth(0.9f)
                 .height(100.dp)
                 .padding(10.dp) //padding
@@ -133,31 +130,37 @@ fun DietGoalBody(
 }
 
 @Composable
-fun DietGoalText() {
-    Text("Какая у вас цель?",
+fun FiltersText() {
+    Text("Особенности, которые важны",
         fontSize = 20.sp,
         color = textBlue,
         modifier = Modifier
             .padding(0.dp) //margin
             .fillMaxWidth()
-            .height(130.dp)
-            .padding(horizontal = 40.dp, vertical = 50.dp) //padding
+            .height(80.dp)
+            .padding(horizontal = 40.dp)
+            .padding(top = 50.dp) //padding
     )
 }
 @Composable
 fun DietGoalButtons() {
-    val diets = listOf(
-        "Похудеть",
-        "Набрать вес",
-        "Нарастить мышцы",
-        "Поддерживать форму",
-        "Просто следить за питанием",
+    val filters = listOf(
+        "Диабет",
+        "Аллергия",
+        "Ожирение",
+        "Гастрит",
+        "Без мяса",
+        "Без молока",
+        "Веган",
+        "Жду ребенка",
+        "Кормление",
     )
-    var selectedDiet by remember {
-        mutableStateOf(diets.first())
+
+    var selectedFilters by remember {
+        mutableStateOf("")
     }
-    val onSelectionChange = { diet: String ->
-        selectedDiet = diet
+    val onSelectionChange = { filter: String ->
+        selectedFilters = filter
     }
 
     Column(
@@ -165,15 +168,17 @@ fun DietGoalButtons() {
         modifier = Modifier
             .padding(top = 10.dp),
     ) {
-        diets.forEach { diet ->
-            val color = if (selectedDiet == diet) orange else login
+        filters.forEach { filter ->
+            val color = if (selectedFilters == filter) orange else login
+            val len = filter.length
+            val btnwid = (len * 24).dp
 
             //KEY for DATABASE
-            val key: Int = diets.indexOf(diet) + 1
+            val key: Int = filters.indexOf(filter) + 1
 
             OutlinedButton(
                 onClick = {
-                    onSelectionChange(diet)
+                    onSelectionChange(filter)
                     //viewmodel-send-key
                 },
                 border = BorderStroke(1.dp, borderBlue),
@@ -182,12 +187,12 @@ fun DietGoalButtons() {
                 ),
                 modifier = Modifier
                     .padding(0.dp) // margin
-                    .fillMaxWidth(0.9f)
-                    .height(80.dp)
-                    .padding(8.dp)
+                    .width(btnwid)
+                    .height(58.dp)
+                    .padding(6.dp)
             ) {
                 Text(
-                    diet + key.toString(),
+                    filter,
                     color = textBlue,
                     fontSize = 18.sp
                 )
@@ -196,8 +201,9 @@ fun DietGoalButtons() {
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
-fun DietGoalBodyPreview() {
-    DietGoalBody()
+fun FiltersBodyPreview() {
+    FiltersBody()
 }
