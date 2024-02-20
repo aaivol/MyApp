@@ -39,6 +39,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.goal.DietGoalDestination
+import com.example.myapp.ui.home.HomeDestination
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.login
@@ -73,6 +74,7 @@ fun SignUpScreen(
             onCreateClick = {
                 coroutineScope.launch {
                     viewModel.saveUser()
+                    navController.navigate(HomeDestination.route)
                 }
             }
         )

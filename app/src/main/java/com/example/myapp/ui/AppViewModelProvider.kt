@@ -5,6 +5,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.myapp.MyApp
+import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.signup.SignUpViewModel
 
 /**
@@ -15,7 +16,12 @@ object AppViewModelProvider {
         // Initializer for SignUp
         initializer {
             SignUpViewModel(
-                dependencies().container.appRepository
+                myapp().container.appRepository
+            )
+        }
+        initializer {
+            HomeViewModel(
+                myapp().container.appRepository
             )
         }
     }
@@ -25,5 +31,5 @@ object AppViewModelProvider {
  * Extension function to queries for [Application] object and returns an instance of
  * [MyApp].
  */
-fun CreationExtras.dependencies(): MyApp =
+fun CreationExtras.myapp(): MyApp =
     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MyApp)

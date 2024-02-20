@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonDefaults
@@ -20,6 +22,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -33,7 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.myapp.data.user.User
+import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.signup.SignUpDestination
 import com.example.myapp.ui.theme.borderBlue
@@ -52,9 +58,11 @@ object HomeDestination : NavigationDestination {
 //HOME SCREEN
 @Composable
 fun HomeScreen(
-    navController: NavController
-    //viewmodel
+    navController: NavController,
+    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val homeUiState by viewModel.homeUiState.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,42 +75,29 @@ fun HomeScreen(
                 .padding(top = 50.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text("#username from db",
-                fontSize = 24.sp,
-                color = Color.White,
-                modifier = Modifier
-                    .padding(0.dp) //margin
-                    .fillMaxWidth()
-                    .background(Color.Magenta)
-                    .height(50.dp)
-                    .padding(10.dp) //padding
-            )
-            Text("#password from db",
-                fontSize = 24.sp,
-                color = textBlue,
-                modifier = Modifier
-                    .padding(0.dp) //margin
-                    .fillMaxWidth()
-                    .background(page)
-                    .height(50.dp)
-                    .padding(10.dp) //padding
-            )
-            Text("#diet_key from db",
-                fontSize = 24.sp,
-                color = Color.White,
-                modifier = Modifier
-                    .padding(0.dp) //margin
-                    .fillMaxWidth()
-                    .background(Color.Magenta)
-                    .height(50.dp)
-                    .padding(10.dp) //padding
+            UserItemList(
+                userList = homeUiState.userList
             )
         }
     }
 }
 
 @Composable
-fun HomeBody(
+private fun UserItemList(
+    userList: List<User>
+){
+    LazyColumn(
+    ) {
+        items(items = userList, key = { it.id }) { user ->
+            UserItem(user = user)
+        }
+    }
+}
+
+
+@Composable
+private fun UserItem(
+    user: User
 ) {
     Column(
         modifier = Modifier
@@ -110,13 +105,14 @@ fun HomeBody(
             .background(page),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        HomeText("kotik")
+        HomeText(user.username)
         Column (
             modifier = Modifier
                 .padding(top = 50.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text("#username from db",
+            Text(
+                text = "# " + user.username,
                 fontSize = 24.sp,
                 color = Color.White,
                 modifier = Modifier
@@ -126,7 +122,8 @@ fun HomeBody(
                     .height(50.dp)
                     .padding(10.dp) //padding
             )
-            Text("#password from db",
+            Text(
+                text = "# " + user.password,
                 fontSize = 24.sp,
                 color = textBlue,
                 modifier = Modifier
@@ -136,7 +133,8 @@ fun HomeBody(
                     .height(50.dp)
                     .padding(10.dp) //padding
             )
-            Text("#diet_key from db",
+            Text(
+                text = "# " + user.dietKey.toString(),
                 fontSize = 24.sp,
                 color = Color.White,
                 modifier = Modifier
@@ -168,5 +166,7 @@ fun HomeText(username: String) {
 @Preview(showBackground = true)
 @Composable
 fun HomeBodyPreview() {
-    HomeBody()
+    UserItem(
+        User(1, "meow", "murr", 1)
+    )
 }
