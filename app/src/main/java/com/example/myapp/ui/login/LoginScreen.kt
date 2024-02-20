@@ -45,6 +45,7 @@ import com.example.myapp.ui.theme.textBlue
 object LoginDestination : NavigationDestination {
     override val route = "login"
     override val titleRes = R.string.app_name
+    const val userNameArg = "userName"
 }
 
 

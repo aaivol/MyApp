@@ -118,7 +118,7 @@ private fun UserItem(
                 modifier = Modifier
                     .padding(0.dp) //margin
                     .fillMaxWidth()
-                    .background(Color.Magenta)
+                    .background(textAccent)
                     .height(50.dp)
                     .padding(10.dp) //padding
             )
@@ -140,7 +140,7 @@ private fun UserItem(
                 modifier = Modifier
                     .padding(0.dp) //margin
                     .fillMaxWidth()
-                    .background(Color.Magenta)
+                    .background(textAccent)
                     .height(50.dp)
                     .padding(10.dp) //padding
             )

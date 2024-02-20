@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class OfflineAppRepository(private val userDao: UserDao) : AppRepository {
         override fun getAllUsersStream(): Flow<List<User>> = userDao.getAllUsers()
 
-        override fun getUserStream(id: Int): Flow<User?> = userDao.getUser(id)
+        override fun getUserStream(username: String): Flow<User?> = userDao.getUser(username)
 
         override suspend fun insertUser(user: User) = userDao.insert(user)
 
