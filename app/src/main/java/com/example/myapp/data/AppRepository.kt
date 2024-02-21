@@ -10,7 +10,7 @@ interface AppRepository {
     fun getAllUsersStream(): Flow<List<User>>
 
     /**
-     * Retrieve an item from the given data source that matches with the id.
+     * Retrieve an item from the given data source that matches with the username.
      */
     fun getUserStream(username: String): Flow<User?>
 

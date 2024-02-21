@@ -1,6 +1,5 @@
 package com.example.myapp.ui.login
 
-import android.text.Layout
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,7 +21,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -33,84 +33,63 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.myapp.ui.AppViewModelProvider
+import com.example.myapp.ui.home.HomeDestination
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.signup.SignUpDestination
+import com.example.myapp.ui.signup.UserDetails
+import com.example.myapp.ui.signup.UserUiState
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.login
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
+import kotlinx.coroutines.coroutineScope
 
 
 object LoginDestination : NavigationDestination {
     override val route = "login"
     override val titleRes = R.string.app_name
-    const val userNameArg = "userName"
+    const val userNameArg = "UiUsername"
+    const val userPasswordArg = "UiPassword"
 }
 
 
 //LOGIN SCREEN
 @Composable
 fun LoginScreen(
-    navController: NavController
-    //viewmodel
+    navController: NavController,
+    viewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    var UiUsername by remember { mutableStateOf("") }
+    var UiPassword by remember { mutableStateOf("") }
+
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        LoginText()
-        Column (
-            modifier = Modifier
-                .padding(top = 50.dp)
-                .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Input("никнейм")
-            Input("пароль")
-
-            OutlinedButton(
-                onClick = {},
-                border = BorderStroke(2.dp, borderBlue),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                modifier = Modifier
-                    .padding(top = 50.dp) // margin
-                    .fillMaxWidth(0.8f)
-                    .height(110.dp)
-                    .padding(20.dp) //margin
-            ) {
-                Text(
-                    "Вперед!",
-                    color = textBlue,
-                    fontSize = 20.sp
-                )
+        LoginBody(
+            toHomeClick = {
+                navController.navigate(HomeDestination.route)
+            },
+            SignUpClick = {
+                navController.navigate(SignUpDestination.route)
             }
-
-            TextButton(
-                onClick = {
-                      navController.navigate(SignUpDestination.route)
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-            ) {
-                Text(
-                    "Еще нет аккаунта? Создать",
-                    color = textAccent,
-                    fontSize = 16.sp
-                )
-            }
-        }
+        )
     }
+
 }
+
 
 @Composable
 fun LoginBody(
+    toHomeClick: () -> Unit,
+    SignUpClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -118,17 +97,11 @@ fun LoginBody(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         LoginText()
-        Column (
-            modifier = Modifier
-                .padding(top = 50.dp)
-                .background(Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Input("никнейм")
-            Input("пароль")
-
+        Column() {
+            InputUserData(
+            )
             OutlinedButton(
-                onClick = {},
+                onClick = toHomeClick,
                 border = BorderStroke(2.dp, borderBlue),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
@@ -147,8 +120,7 @@ fun LoginBody(
             }
 
             TextButton(
-                onClick = {
-                },
+                onClick = SignUpClick,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
                 ),
@@ -167,8 +139,40 @@ fun LoginBody(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Input(message: String) {
-    var text by rememberSaveable { mutableStateOf("") }
+fun InputUserData(
+) {
+    Column (
+        modifier = Modifier
+            .padding(top = 50.dp)
+            .background(Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        InputField(
+            message = "никнейм",
+            type = "Text",
+            visualTransformation = VisualTransformation.None
+
+        )
+        InputField(
+            message = "пароль",
+            type = "Text",
+            visualTransformation = PasswordVisualTransformation()
+        )
+
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InputField(
+    message: String,
+    type: String,
+    visualTransformation: VisualTransformation
+) {
+    var text by remember {
+        mutableStateOf("")
+    }
     TextField(
         value = text,
         onValueChange = { text = it },
@@ -177,7 +181,7 @@ fun Input(message: String) {
             fontSize = 18.sp,
             color = textBlue
         ) },
-        visualTransformation = PasswordVisualTransformation(),
+        visualTransformation = visualTransformation,
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.White,
             disabledTextColor = Color.Transparent,
@@ -197,7 +201,7 @@ fun Input(message: String) {
 
 @Composable
 fun LoginText() {
-    Text("Вход",
+    Text("LOGIN",
         fontSize = 35.sp,
         color = textBlue,
         modifier = Modifier
@@ -212,6 +216,6 @@ fun LoginText() {
 
 @Preview(showBackground = true)
 @Composable
-fun LoginBodyPreview() {
-    LoginBody()
+fun LoginPreview() {
+    LoginBody(toHomeClick = {}, SignUpClick = {})
 }

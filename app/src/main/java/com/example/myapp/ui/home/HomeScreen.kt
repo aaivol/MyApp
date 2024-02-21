@@ -105,7 +105,6 @@ private fun UserItem(
             .background(page),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        HomeText(user.username)
         Column (
             modifier = Modifier
                 .padding(top = 50.dp),
