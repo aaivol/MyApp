@@ -4,8 +4,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.user.User
 import com.example.myapp.data.AppRepository
+import com.example.myapp.ui.home.HomeUiState
+import com.example.myapp.ui.home.HomeViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import java.text.NumberFormat
 
 /**
@@ -25,6 +33,22 @@ class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
     fun updateUiState(userDetails: UserDetails) {
         userUiState =
             UserUiState(userDetails = userDetails, isEntryValid = validateInput(userDetails))
+    }
+
+    suspend fun tryLogin(uiState: UserDetails): Boolean {
+        var passwFromDb = ""
+        if (validateInput()) {
+            val userFromDb = appRepository.getUserStream(uiState.username)
+                .filterNotNull()
+            passwFromDb = userFromDb.map { it.password }.toString()
+
+            return passwFromDb == uiState.password
+        }
+        return false
+    }
+
+    companion object {
+        private const val TIMEOUT_MILLIS = 5_000L
     }
 
     /**

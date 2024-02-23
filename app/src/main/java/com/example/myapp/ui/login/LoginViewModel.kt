@@ -28,13 +28,4 @@ class LoginViewModel (
     private val appRepository : AppRepository
 ) : ViewModel() {
 
-    fun validateUser(userDetails: UserDetails) {
-        viewModelScope.launch {
-            val currentUsername = userDetails.username
-            val currentPassword = userDetails.username
-
-            val currentUser = appRepository.getUserStream(currentUsername)
-        }
-    }
-
 }

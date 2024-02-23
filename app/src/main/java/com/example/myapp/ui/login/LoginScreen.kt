@@ -1,5 +1,7 @@
 package com.example.myapp.ui.login
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,17 +15,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,20 +32,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.myapp.MainActivity
 import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.home.HomeDestination
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.signup.SignUpDestination
+import com.example.myapp.ui.signup.SignUpViewModel
 import com.example.myapp.ui.signup.UserDetails
 import com.example.myapp.ui.signup.UserUiState
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.login
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 
 object LoginDestination : NavigationDestination {
@@ -61,11 +61,8 @@ object LoginDestination : NavigationDestination {
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    var UiUsername by remember { mutableStateOf("") }
-    var UiPassword by remember { mutableStateOf("") }
-
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -74,8 +71,18 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         LoginBody(
-            toHomeClick = {
-                navController.navigate(HomeDestination.route)
+            userUiState = viewModel.userUiState,
+            onUserValueChange = viewModel::updateUiState,
+            HomeClick = {
+                coroutineScope.launch {
+                    val checkUser = viewModel.userUiState.userDetails
+                    if (viewModel.tryLogin(checkUser)) {
+                        navController.navigate(HomeDestination.route)
+                    }
+                    else {
+                        navController.navigate(SignUpDestination.route)
+                    }
+                }
             },
             SignUpClick = {
                 navController.navigate(SignUpDestination.route)
@@ -88,7 +95,9 @@ fun LoginScreen(
 
 @Composable
 fun LoginBody(
-    toHomeClick: () -> Unit,
+    userUiState: UserUiState,
+    onUserValueChange: (UserDetails) -> Unit,
+    HomeClick: () -> Unit,
     SignUpClick: () -> Unit
 ) {
     Column(
@@ -99,9 +108,11 @@ fun LoginBody(
         LoginText()
         Column() {
             InputUserData(
+                userDetails = userUiState.userDetails,
+                onValueChange = onUserValueChange,
             )
             OutlinedButton(
-                onClick = toHomeClick,
+                onClick = HomeClick,
                 border = BorderStroke(2.dp, borderBlue),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
@@ -140,6 +151,8 @@ fun LoginBody(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputUserData(
+    userDetails: UserDetails,
+    onValueChange: (UserDetails) -> Unit = {},
 ) {
     Column (
         modifier = Modifier
@@ -148,17 +161,9 @@ fun InputUserData(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         InputField(
-            message = "никнейм",
-            type = "Text",
-            visualTransformation = VisualTransformation.None
-
+            userDetails = userDetails,
+            onValueChange = onValueChange
         )
-        InputField(
-            message = "пароль",
-            type = "Text",
-            visualTransformation = PasswordVisualTransformation()
-        )
-
     }
 
 }
@@ -166,22 +171,42 @@ fun InputUserData(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputField(
-    message: String,
-    type: String,
-    visualTransformation: VisualTransformation
+    userDetails: UserDetails,
+    onValueChange: (UserDetails) -> Unit = {}
 ) {
-    var text by remember {
-        mutableStateOf("")
-    }
     TextField(
-        value = text,
-        onValueChange = { text = it },
+        value = userDetails.username,
+        onValueChange = { onValueChange(userDetails.copy(username = it)) },
         label = { Text(
-            "Введите $message",
+            "Введите никнейм",
             fontSize = 18.sp,
             color = textBlue
         ) },
-        visualTransformation = visualTransformation,
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.White,
+            disabledTextColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        ),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        modifier = Modifier
+            .padding(top = 10.dp) // margin
+            .fillMaxWidth(0.8f)
+            .height(110.dp)
+            .padding(20.dp) //padding
+            .border(2.dp, borderBlue, RoundedCornerShape(60.dp))
+    )
+
+    TextField(
+        value = userDetails.password,
+        onValueChange = { onValueChange(userDetails.copy(password = it)) },
+        label = { Text(
+            "Введите пароль",
+            fontSize = 18.sp,
+            color = textBlue
+        ) },
+        visualTransformation = PasswordVisualTransformation(),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.White,
             disabledTextColor = Color.Transparent,
@@ -217,5 +242,11 @@ fun LoginText() {
 @Preview(showBackground = true)
 @Composable
 fun LoginPreview() {
-    LoginBody(toHomeClick = {}, SignUpClick = {})
+    LoginBody(
+        userUiState = UserUiState(
+            UserDetails(
+                username = "pivk", password = "1234"
+            )
+        ), onUserValueChange = {}, HomeClick = {}, SignUpClick = {}
+    )
 }
