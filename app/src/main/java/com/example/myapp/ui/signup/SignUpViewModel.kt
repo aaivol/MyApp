@@ -12,12 +12,15 @@ import com.example.myapp.ui.home.HomeViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.text.NumberFormat
 
 /**
- * ViewModel to validate and insert users in the Room database = sign up.
+ * ViewModel to validate and insert users in the Room database .
  */
 class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
     /**
@@ -36,11 +39,16 @@ class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
     }
 
     suspend fun tryLogin(uiState: UserDetails): Boolean {
+
         var passwFromDb = ""
+
         if (validateInput()) {
-            val userFromDb = appRepository.getUserStream(uiState.username)
+            val userDbState = appRepository.getUserStream(uiState.username)
                 .filterNotNull()
-            passwFromDb = userFromDb.map { it.password }.toString()
+                .first()
+                .toUserUiState(true)
+
+            passwFromDb = userDbState.userDetails.password
 
             return passwFromDb == uiState.password
         }
@@ -82,11 +90,6 @@ data class UserDetails(
     val dietKey: String = "",
 )
 
-/**
- * Extension function to convert [UserDetails] to [User]. If the value of [UserDetails.price] is
- * not a valid [Double], then the price will be set to 0.0. Similarly if the value of
- * [UserDetails.quantity] is not a valid [Int], then the quantity will be set to 0
- */
 fun UserDetails.toUser(): User = User(
     id = id,
     username = username,
