@@ -3,6 +3,7 @@ package com.example.myapp.ui.login
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapp.MainActivity
@@ -43,7 +50,11 @@ import com.example.myapp.ui.signup.SignUpViewModel
 import com.example.myapp.ui.signup.UserDetails
 import com.example.myapp.ui.signup.UserUiState
 import com.example.myapp.ui.theme.borderBlue
+import com.example.myapp.ui.theme.cruinn_black
+import com.example.myapp.ui.theme.cruinn_bold
+import com.example.myapp.ui.theme.cruinn_medium
 import com.example.myapp.ui.theme.login
+import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
 import kotlinx.coroutines.launch
@@ -78,8 +89,7 @@ fun LoginScreen(
                     val checkUser = viewModel.userUiState.userDetails
                     if (viewModel.tryLogin(checkUser)) {
                         navController.navigate(HomeDestination.route)
-                    }
-                    else {
+                    } else {
                         navController.navigate(SignUpDestination.route)
                     }
                 }
@@ -102,10 +112,11 @@ fun LoginBody(
 ) {
     Column(
         modifier = Modifier
+            .background(Color.White)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        LoginText()
+        LoginTop()
         Column() {
             InputUserData(
                 userDetails = userUiState.userDetails,
@@ -115,18 +126,19 @@ fun LoginBody(
                 onClick = HomeClick,
                 border = BorderStroke(2.dp, borderBlue),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
+                    containerColor = orange,
                 ),
                 modifier = Modifier
-                    .padding(top = 50.dp) // margin
+                    .padding(top = 40.dp) // margin
                     .fillMaxWidth(0.8f)
                     .height(110.dp)
-                    .padding(20.dp) //margin
+                    .padding(16.dp) //margin
             ) {
                 Text(
                     "Вперед!",
                     color = textBlue,
-                    fontSize = 20.sp
+                    fontFamily = cruinn_bold,
+                    fontSize = 22.sp
                 )
             }
 
@@ -139,9 +151,17 @@ fun LoginBody(
                     .fillMaxWidth(0.8f)
             ) {
                 Text(
-                    "Еще нет аккаунта? Создать",
-                    color = textAccent,
-                    fontSize = 16.sp
+                    "Еще нет аккаунта?",
+                    color = textBlue,
+                    fontFamily = cruinn_medium,
+                    fontSize = 18.sp
+                )
+
+                Text(
+                    "Создать",
+                    color = textBlue,
+                    fontFamily = cruinn_black,
+                    fontSize = 18.sp
                 )
             }
         }
@@ -154,9 +174,9 @@ fun InputUserData(
     userDetails: UserDetails,
     onValueChange: (UserDetails) -> Unit = {},
 ) {
-    Column (
+    Column(
         modifier = Modifier
-            .padding(top = 50.dp)
+            .padding(top = 30.dp)
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -177,11 +197,14 @@ fun InputField(
     TextField(
         value = userDetails.username,
         onValueChange = { onValueChange(userDetails.copy(username = it)) },
-        label = { Text(
-            "Введите никнейм",
-            fontSize = 18.sp,
-            color = textBlue
-        ) },
+        label = {
+            Text(
+                "Введите никнейм",
+                fontSize = 18.sp,
+                fontFamily = cruinn_medium,
+                color = textBlue
+            )
+        },
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.White,
             disabledTextColor = Color.Transparent,
@@ -201,11 +224,14 @@ fun InputField(
     TextField(
         value = userDetails.password,
         onValueChange = { onValueChange(userDetails.copy(password = it)) },
-        label = { Text(
-            "Введите пароль",
-            fontSize = 18.sp,
-            color = textBlue
-        ) },
+        label = {
+            Text(
+                "Введите пароль",
+                fontSize = 18.sp,
+                fontFamily = cruinn_medium,
+                color = textBlue
+            )
+        },
         visualTransformation = PasswordVisualTransformation(),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.White,
@@ -225,17 +251,36 @@ fun InputField(
 }
 
 @Composable
-fun LoginText() {
-    Text("LOGIN",
-        fontSize = 35.sp,
-        color = textBlue,
+fun LoginTop() {
+    Column(
         modifier = Modifier
-            .padding(0.dp) //margin
-            .fillMaxWidth()
-            .fillMaxHeight(0.3f)
-            .background(login)
-            .padding(horizontal = 60.dp, vertical = 50.dp) //padding
-    )
+            .fillMaxHeight(0.34f)
+            .background(login),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.login_circles),
+            contentDescription = "circles",
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+        
+        Text(
+            "ВХОД",
+            fontSize = 70.sp,
+            fontFamily = cruinn_medium,
+            style = TextStyle(
+                brush = Brush.verticalGradient(
+                    colors = listOf(textBlue, login),
+                    tileMode = TileMode.Mirror
+                )
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 0.dp) //padding
+                .padding(horizontal = 50.dp) //padding
+        )
+    }
 }
 
 
