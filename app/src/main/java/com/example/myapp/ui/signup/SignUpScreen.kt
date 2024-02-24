@@ -74,7 +74,7 @@ fun SignUpScreen(
             onCreateClick = {
                 coroutineScope.launch {
                     viewModel.saveUser()
-                    navController.navigate(HomeDestination.route)
+                    navController.navigate(DietGoalDestination.route)
                 }
             }
         )

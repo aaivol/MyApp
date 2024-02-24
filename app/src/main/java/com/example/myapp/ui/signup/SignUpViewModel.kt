@@ -38,6 +38,10 @@ class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
             UserUiState(userDetails = userDetails, isEntryValid = validateInput(userDetails))
     }
 
+    /**
+     * Checks that [password] from [LoginScreen] matches with [password] from [database] via username. This method also triggers
+     * a validation for input values.
+     */
     suspend fun tryLogin(uiState: UserDetails): Boolean {
 
         var passwFromDb = ""
@@ -68,6 +72,18 @@ class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
         }
     }
 
+    /**
+     * Updates an [User] in the Room database
+     */
+    suspend fun updateUser() {
+        if (validateInput()) {
+            appRepository.updateUser(userUiState.userDetails.toUser())
+        }
+    }
+
+    /**
+     * Validates not null definitions of [username] and [password]
+     */
     private fun validateInput(uiState: UserDetails = userUiState.userDetails): Boolean {
         return with(uiState) {
             username.isNotBlank() && password.isNotBlank()
@@ -87,7 +103,7 @@ data class UserDetails(
     val id: Int = 0,
     val username: String = "",
     val password: String = "",
-    val dietKey: String = "",
+    var dietKey: String = "",
 )
 
 fun UserDetails.toUser(): User = User(
