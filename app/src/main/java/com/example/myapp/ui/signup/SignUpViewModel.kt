@@ -1,5 +1,6 @@
 package com.example.myapp.ui.signup
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -7,8 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.user.User
 import com.example.myapp.data.AppRepository
-import com.example.myapp.ui.home.HomeUiState
-import com.example.myapp.ui.home.HomeViewModel
+import com.example.myapp.dataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.filterNotNull
@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.text.NumberFormat
+import androidx.datastore.preferences.core.edit
 
 /**
  * ViewModel to validate and insert users in the Room database .
@@ -89,6 +90,15 @@ class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
             username.isNotBlank() && password.isNotBlank()
         }
     }
+
+    suspend fun setUsername(context: Context, name: String) {
+        context.dataStore.updateData {
+            it.copy(
+                user = com.example.myapp.User(name)
+            )
+        }
+    }
+
 }
 
 /**

@@ -23,6 +23,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -35,13 +36,19 @@ import com.example.myapp.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.datastore.dataStore
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.myapp.DataStoring
+import com.example.myapp.DataStoringSerializer
 import com.example.myapp.MainActivity
+import com.example.myapp.User
+import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.home.HomeDestination
 import com.example.myapp.ui.navigation.NavigationDestination
@@ -59,14 +66,12 @@ import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
 import kotlinx.coroutines.launch
 
-
 object LoginDestination : NavigationDestination {
     override val route = "login"
     override val titleRes = R.string.app_name
     const val userNameArg = "UiUsername"
     const val userPasswordArg = "UiPassword"
 }
-
 
 //LOGIN SCREEN
 @Composable
@@ -75,6 +80,8 @@ fun LoginScreen(
     navigateToHome: () -> Unit,
     viewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val context = LocalContext.current
+
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -89,6 +96,7 @@ fun LoginScreen(
                 coroutineScope.launch {
                     val checkUser = viewModel.userUiState.userDetails
                     if (viewModel.tryLogin(checkUser)) {
+                        viewModel.setUsername(context, checkUser.username)
                         navigateToHome()
                     } else {
                         navigateToSignUp()
@@ -265,7 +273,7 @@ fun LoginTop() {
             modifier = Modifier
                 .fillMaxWidth()
         )
-        
+
         Text(
             "ВХОД",
             fontSize = 70.sp,

@@ -36,9 +36,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.myapp.DataStoring
 import com.example.myapp.data.user.User
+import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.signup.SignUpDestination
@@ -61,6 +64,13 @@ fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val context = LocalContext.current
+
+    val usernameStored = context.dataStore.data.collectAsState(
+        initial = DataStoring()
+    ).value.user.name.toString()
+
+
     val homeUiState by viewModel.homeUiState.collectAsState()
 
     Column(
@@ -69,7 +79,7 @@ fun HomeScreen(
             .background(page),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        HomeText("kotik")
+        HomeText(usernameStored)
         Column (
             modifier = Modifier
                 .padding(top = 50.dp),
@@ -112,35 +122,35 @@ private fun UserItem(
         ) {
             Text(
                 text = "# " + user.username,
-                fontSize = 24.sp,
-                color = Color.White,
-                modifier = Modifier
-                    .padding(0.dp) //margin
-                    .fillMaxWidth()
-                    .background(textAccent)
-                    .height(50.dp)
-                    .padding(10.dp) //padding
-            )
-            Text(
-                text = "# " + user.password,
-                fontSize = 24.sp,
+                fontSize = 18.sp,
                 color = textBlue,
                 modifier = Modifier
                     .padding(0.dp) //margin
                     .fillMaxWidth()
                     .background(page)
-                    .height(50.dp)
+                    .height(45.dp)
                     .padding(10.dp) //padding
             )
             Text(
-                text = "# " + user.dietKey.toString(),
-                fontSize = 24.sp,
+                text = "# " + user.password,
+                fontSize = 18.sp,
                 color = Color.White,
                 modifier = Modifier
                     .padding(0.dp) //margin
                     .fillMaxWidth()
-                    .background(textAccent)
-                    .height(50.dp)
+                    .background(login)
+                    .height(40.dp)
+                    .padding(10.dp) //padding
+            )
+            Text(
+                text = "# " + user.dietKey.toString(),
+                fontSize = 18.sp,
+                color = Color.White,
+                modifier = Modifier
+                    .padding(0.dp) //margin
+                    .fillMaxWidth()
+                    .background(login)
+                    .height(40.dp)
                     .padding(10.dp) //padding
             )
         }
@@ -150,12 +160,12 @@ private fun UserItem(
 @Composable
 fun HomeText(username: String) {
     Text("Здравствуй, $username !",
-        fontSize = 22.sp,
+        fontSize = 24.sp,
         color = textBlue,
         modifier = Modifier
             .padding(0.dp) //margin
             .fillMaxWidth()
-            .height(60.dp)
+            .height(80.dp)
             .padding(top = 30.dp) //padding
             .padding(horizontal = 40.dp) //padding
     )
