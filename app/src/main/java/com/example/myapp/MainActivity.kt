@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.example.myapp.ui.goal.DietGoalScreen
 import com.example.myapp.ui.login.LoginScreen
 import com.example.myapp.ui.navigation.MyAppNavHost
@@ -25,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MyAppNavHost()
+                    MyAppNavHost(navController = rememberNavController())
                 }
             }
         }

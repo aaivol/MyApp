@@ -71,7 +71,8 @@ object LoginDestination : NavigationDestination {
 //LOGIN SCREEN
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    navigateToSignUp: () -> Unit,
+    navigateToHome: () -> Unit,
     viewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -88,14 +89,14 @@ fun LoginScreen(
                 coroutineScope.launch {
                     val checkUser = viewModel.userUiState.userDetails
                     if (viewModel.tryLogin(checkUser)) {
-                        navController.navigate(HomeDestination.route)
+                        navigateToHome()
                     } else {
-                        navController.navigate(SignUpDestination.route)
+                        navigateToSignUp()
                     }
                 }
             },
             SignUpClick = {
-                navController.navigate(SignUpDestination.route)
+                navigateToSignUp()
             }
         )
     }

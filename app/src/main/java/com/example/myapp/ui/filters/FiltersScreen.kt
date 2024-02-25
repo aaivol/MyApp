@@ -58,16 +58,15 @@ object FiltersDestination : NavigationDestination {
     override val titleRes = R.string.app_name
 }
 
-
 //FILTERS SCREEN
 @Composable
 fun FiltersScreen(
-    navController: NavController
+    navigateToHome: () -> Unit
     //viewmodel
 ) {
     FiltersBody(
         toHome = {
-
+            navigateToHome()
         }
     )
 }
@@ -86,6 +85,7 @@ fun FiltersBody(
         DietGoalButtons()
         OutlinedButton(
             onClick = toHome,
+            //connect to viewmodel with filters
             border = BorderStroke(1.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
                 containerColor = orange,

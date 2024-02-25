@@ -68,7 +68,7 @@ object DietGoalDestination : NavigationDestination {
 //CHOOSE DIET GOAL SCREEN
 @Composable
 fun DietGoalScreen(
-    navController: NavController,
+    navigateToFilters: () -> Unit,
     viewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -78,7 +78,7 @@ fun DietGoalScreen(
         toFilters = {
             coroutineScope.launch {
                 //viewModel.updateUser()
-                navController.navigate(FiltersDestination.route)
+                navigateToFilters()
             }
         }
     )

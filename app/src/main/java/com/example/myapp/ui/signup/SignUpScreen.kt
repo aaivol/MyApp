@@ -58,7 +58,7 @@ object SignUpDestination : NavigationDestination {
 //SIGN UP SCREEN
 @Composable
 fun SignUpScreen(
-    navController: NavController,
+    navigateToDietGoal: () -> Unit,
     viewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -74,7 +74,7 @@ fun SignUpScreen(
             onCreateClick = {
                 coroutineScope.launch {
                     viewModel.saveUser()
-                    navController.navigate(DietGoalDestination.route)
+                    navigateToDietGoal()
                 }
             }
         )

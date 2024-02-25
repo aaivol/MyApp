@@ -24,23 +24,33 @@ import com.example.myapp.ui.signup.SignUpScreen
  */
 
 @Composable
-fun MyAppNavHost() {
-    val navController = rememberNavController()
+fun MyAppNavHost(
+    navController : NavHostController
+) {
     NavHost(
         navController = navController,
         startDestination = LoginDestination.route
     ) {
         composable(route = LoginDestination.route) {
-            LoginScreen(navController)
+            LoginScreen(
+                navigateToSignUp = { navController.navigate(SignUpDestination.route) },
+                navigateToHome = { navController.navigate(HomeDestination.route) }
+            )
         }
         composable(route = SignUpDestination.route) {
-            SignUpScreen(navController)
+            SignUpScreen(
+                navigateToDietGoal = { navController.navigate(DietGoalDestination.route) }
+            )
         }
         composable(route = DietGoalDestination.route) {
-            DietGoalScreen(navController)
+            DietGoalScreen(
+                navigateToFilters = { navController.navigate(FiltersDestination.route) }
+            )
         }
         composable(route = FiltersDestination.route) {
-            FiltersScreen(navController)
+            FiltersScreen(
+                navigateToHome = { navController.navigate(HomeDestination.route) }
+            )
         }
         composable(route = HomeDestination.route) {
             HomeScreen(navController)
