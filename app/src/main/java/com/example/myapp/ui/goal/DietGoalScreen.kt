@@ -75,10 +75,10 @@ fun DietGoalScreen(
 
     DietGoalBody(
         userUiState = viewModel.userUiState,
-        toHomeClick = {
+        toFilters = {
             coroutineScope.launch {
-                viewModel.updateUser()
-                navController.navigate(HomeDestination.route)
+                //viewModel.updateUser()
+                navController.navigate(FiltersDestination.route)
             }
         }
     )
@@ -87,7 +87,7 @@ fun DietGoalScreen(
 @Composable
 fun DietGoalBody(
     userUiState: UserUiState,
-    toHomeClick: () -> Unit
+    toFilters: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -101,7 +101,7 @@ fun DietGoalBody(
         )
 
         OutlinedButton(
-            onClick = toHomeClick,
+            onClick = toFilters,
             border = BorderStroke(1.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
                 containerColor = orange,
@@ -197,6 +197,6 @@ fun DietGoalBodyPreview() {
                 username = "pivk1", password = "1234", dietKey = "1"
             )
         ),
-        toHomeClick = {}
+        toFilters = {}
     )
 }

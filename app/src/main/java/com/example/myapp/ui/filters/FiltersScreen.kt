@@ -26,6 +26,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -64,39 +65,16 @@ fun FiltersScreen(
     navController: NavController
     //viewmodel
 ) {
-    Column(
-        modifier = Modifier
-            .background(page)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        FiltersText()
-        DietGoalButtons()
-        OutlinedButton(
-            onClick = {
-                //navController.navigate(HomeDestination.route)
-            },
-            border = BorderStroke(1.dp, borderBlue),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = orange,
-            ),
-            modifier = Modifier
-                .padding(top = 10.dp) // margin
-                .fillMaxWidth(0.9f)
-                .height(100.dp)
-                .padding(10.dp) //padding
-        ) {
-            Text(
-                text = "Далее",
-                color = textBlue,
-                fontSize = 20.sp
-            )
+    FiltersBody(
+        toHome = {
+
         }
-    }
+    )
 }
 
 @Composable
 fun FiltersBody(
+    toHome: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -107,9 +85,7 @@ fun FiltersBody(
         FiltersText()
         DietGoalButtons()
         OutlinedButton(
-            onClick = {
-                //navigate-to-home
-            },
+            onClick = toHome,
             border = BorderStroke(1.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
                 containerColor = orange,
@@ -149,29 +125,33 @@ fun DietGoalButtons() {
         "Аллергия",
         "Ожирение",
         "Гастрит",
+        "Веган",
         "Без мяса",
         "Без молока",
-        "Веган",
         "Жду ребенка",
         "Кормление",
     )
 
-    var selectedFilters by remember {
-        mutableStateOf("")
+    var selectedFilters = remember {
+        mutableStateListOf<String>()
     }
     val onSelectionChange = { filter: String ->
-        selectedFilters = filter
+        selectedFilters.add(filter)
     }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.Start,
         modifier = Modifier
-            .padding(top = 10.dp),
+            .padding(top = 10.dp)
+            .padding(horizontal = 30.dp)
+            .fillMaxWidth()
     ) {
         filters.forEach { filter ->
-            val color = if (selectedFilters == filter) orange else login
+            val color = if (
+                selectedFilters.contains(filter)
+                ) orange else login
             val len = filter.length
-            val btnwid = (len * 24).dp
+            val btnwid = (len * 22).dp
 
             //KEY for DATABASE
             val key: Int = filters.indexOf(filter) + 1
@@ -205,5 +185,7 @@ fun DietGoalButtons() {
 @Preview(showBackground = true)
 @Composable
 fun FiltersBodyPreview() {
-    FiltersBody()
+    FiltersBody(
+        toHome = {}
+    )
 }

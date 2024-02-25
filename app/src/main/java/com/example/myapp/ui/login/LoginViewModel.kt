@@ -24,8 +24,7 @@ import kotlinx.coroutines.launch
 /**
  * ViewModel validate [User] during LOGIN from the [AppRepository]'s data source.
  */
-class LoginViewModel (
-    private val appRepository : AppRepository
-) : ViewModel() {
+class LoginViewModel ( private val appRepository : AppRepository) : ViewModel() {
+
 
 }
