@@ -147,9 +147,8 @@ fun DietGoalButtons() {
             .fillMaxWidth()
     ) {
         filters.forEach { filter ->
-            val color = if (
-                selectedFilters.contains(filter)
-                ) orange else login
+            val isSelected = selectedFilters.contains(filter)
+            val color = if (isSelected) orange else login
             val len = filter.length
             val btnwid = (len * 22).dp
 
@@ -158,8 +157,13 @@ fun DietGoalButtons() {
 
             OutlinedButton(
                 onClick = {
-                    onSelectionChange(filter)
-                    //viewmodel-send-key
+                    if (isSelected) {
+                        selectedFilters.remove(filter)
+                    }
+                    else {
+                        onSelectionChange(filter)
+                        //viewmodel-send-key
+                    }
                 },
                 border = BorderStroke(1.dp, borderBlue),
                 colors = ButtonDefaults.buttonColors(
