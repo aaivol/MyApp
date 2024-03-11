@@ -40,17 +40,23 @@ class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
     }
 
     /**
-     * Checks that [password] from [LoginScreen] matches with [password] from [database] via username. This method also triggers
-     * a validation for input values.
+     * Returns the [User] found with passed [username]
+     */
+    private suspend fun findUser(name: String): User{
+        return appRepository.getUserStream(name)
+            .filterNotNull()
+            .first()
+    }
+
+    /**
+     * Checks that [password] from [LoginScreen] matches with [password] from [database] via username.
      */
     suspend fun tryLogin(uiState: UserDetails): Boolean {
 
         var passwFromDb = ""
 
         if (validateInput()) {
-            val userDbState = appRepository.getUserStream(uiState.username)
-                .filterNotNull()
-                .first()
+            val userDbState = findUser(uiState.username)
                 .toUserUiState(true)
 
             passwFromDb = userDbState.userDetails.password
