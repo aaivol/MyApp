@@ -1,5 +1,6 @@
 package com.example.myapp.ui.home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -47,18 +49,22 @@ object HomeDestination : NavigationDestination {
     override val titleRes = R.string.app_name
 }
 
-
 //HOME SCREEN
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    //get current username from datastore
     val context = LocalContext.current
-
     val usernameStored = context.dataStore.data.collectAsState(
         initial = DataStoring()
     ).value.user.name.toString()
+
+    //update username in viewmodel
+    viewModel.updateName(usernameStored)
+    val userState = viewModel.currentUser
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -71,34 +77,28 @@ fun HomeScreen(
         HomeText(usernameStored)
         Column (
             modifier = Modifier
-                .padding(top = 50.dp),
+                .padding(top = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            UserUpdates(
-                getProps = {
-                   coroutineScope.launch {
-                       viewModel.updateName(usernameStored)
-                   }
+            UserProps(
+                update = {
+                    coroutineScope.launch {
+                        //get properties from Room database
+                        viewModel.getUser()
+                    }
                 },
-                viewModel
+                userState.value.userDetails
             )
         }
     }
 }
 
 @Composable
-private fun UserUpdates(
-    getProps: () -> Unit,
-    viewModel: HomeViewModel
-) {
-    val currentUser by viewModel.uiState.collectAsState()
-    UserItem(currentUser.userDetails)
-}
-
-@Composable
-private fun UserItem(
+private fun UserProps(
+    update: () -> Unit,
     userDetails: UserDetails
 ) {
+    update()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -106,43 +106,53 @@ private fun UserItem(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column (
-            modifier = Modifier
-                .padding(top = 50.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = "ID # " + userDetails.id,
-                fontSize = 18.sp,
+                fontSize = 24.sp,
                 color = textBlue,
                 modifier = Modifier
                     .padding(0.dp) //margin
                     .fillMaxWidth()
                     .background(page)
-                    .height(45.dp)
+                    .height(60.dp)
                     .padding(10.dp) //padding
             )
 
             Text(
                 text = "name # " + userDetails.username,
-                fontSize = 18.sp,
+                fontSize = 24.sp,
                 color = textBlue,
                 modifier = Modifier
                     .padding(0.dp) //margin
                     .fillMaxWidth()
                     .background(page)
-                    .height(45.dp)
+                    .height(60.dp)
                     .padding(10.dp) //padding
             )
 
             Text(
-                text = "diet # " + userDetails.dietKey.toString(),
-                fontSize = 18.sp,
+                text = "password # " + userDetails.password,
+                fontSize = 20.sp,
                 color = Color.White,
                 modifier = Modifier
                     .padding(0.dp) //margin
                     .fillMaxWidth()
                     .background(login)
-                    .height(40.dp)
+                    .height(60.dp)
+                    .padding(10.dp) //padding
+            )
+
+            Text(
+                text = "diet # " + userDetails.dietKey.toString(),
+                fontSize = 20.sp,
+                color = Color.White,
+                modifier = Modifier
+                    .padding(0.dp) //margin
+                    .fillMaxWidth()
+                    .background(login)
+                    .height(60.dp)
                     .padding(10.dp) //padding
             )
         }
@@ -160,14 +170,5 @@ fun HomeText(username: String) {
             .height(80.dp)
             .padding(top = 30.dp) //padding
             .padding(horizontal = 40.dp) //padding
-    )
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun HomeBodyPreview() {
-    UserItem(
-        User(1, "meow", "murr", 1).toUserDetails()
     )
 }
