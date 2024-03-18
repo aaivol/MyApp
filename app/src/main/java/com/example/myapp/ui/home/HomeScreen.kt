@@ -1,14 +1,18 @@
 package com.example.myapp.ui.home
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,12 +35,16 @@ import com.example.myapp.DataStoring
 import com.example.myapp.data.user.User
 import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
+import com.example.myapp.ui.login.LoginBody
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.signup.SignUpDestination
 import com.example.myapp.ui.signup.UserDetails
+import com.example.myapp.ui.signup.UserUiState
 import com.example.myapp.ui.signup.toUserDetails
 import com.example.myapp.ui.theme.borderBlue
+import com.example.myapp.ui.theme.cruinn_bold
 import com.example.myapp.ui.theme.login
+import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.page
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
@@ -76,9 +84,6 @@ fun HomeScreen(
     ) {
         HomeText(usernameStored)
         Column (
-            modifier = Modifier
-                .padding(top = 30.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             UserProps(
                 update = {
@@ -90,6 +95,7 @@ fun HomeScreen(
                 userState.value.userDetails
             )
         }
+        HomeMenu()
     }
 }
 
@@ -101,7 +107,7 @@ private fun UserProps(
     update()
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(page),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -109,50 +115,38 @@ private fun UserProps(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "ID # " + userDetails.id,
-                fontSize = 24.sp,
+                text = "Ваш ID # " + userDetails.id,
+                fontSize = 16.sp,
                 color = textBlue,
                 modifier = Modifier
                     .padding(0.dp) //margin
                     .fillMaxWidth()
                     .background(page)
-                    .height(60.dp)
+                    .height(40.dp)
                     .padding(10.dp) //padding
             )
 
             Text(
-                text = "name # " + userDetails.username,
-                fontSize = 24.sp,
+                text = "Ваш никнейм # " + userDetails.username,
+                fontSize = 16.sp,
                 color = textBlue,
                 modifier = Modifier
                     .padding(0.dp) //margin
                     .fillMaxWidth()
                     .background(page)
-                    .height(60.dp)
+                    .height(40.dp)
                     .padding(10.dp) //padding
             )
 
             Text(
-                text = "password # " + userDetails.password,
-                fontSize = 20.sp,
+                text = "Ваша диета # " + userDetails.dietKey.toString(),
+                fontSize = 16.sp,
                 color = Color.White,
                 modifier = Modifier
                     .padding(0.dp) //margin
                     .fillMaxWidth()
                     .background(login)
-                    .height(60.dp)
-                    .padding(10.dp) //padding
-            )
-
-            Text(
-                text = "diet # " + userDetails.dietKey.toString(),
-                fontSize = 20.sp,
-                color = Color.White,
-                modifier = Modifier
-                    .padding(0.dp) //margin
-                    .fillMaxWidth()
-                    .background(login)
-                    .height(60.dp)
+                    .height(40.dp)
                     .padding(10.dp) //padding
             )
         }
@@ -171,4 +165,95 @@ fun HomeText(username: String) {
             .padding(top = 30.dp) //padding
             .padding(horizontal = 40.dp) //padding
     )
+}
+
+@Composable
+fun HomeMenu(
+) {
+    Column (
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        OutlinedButton(
+            onClick = {},
+            border = BorderStroke(2.dp, borderBlue),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = orange,
+            ),
+            modifier = Modifier
+                .padding(top = 10.dp) // margin
+                .fillMaxWidth(0.85f)
+                .height(160.dp)
+                .padding(16.dp) //margin
+        ) {
+            Text(
+                "Питание",
+                color = textBlue,
+                fontFamily = cruinn_bold,
+                fontSize = 22.sp
+            )
+        }
+
+        OutlinedButton(
+            onClick = {},
+            border = BorderStroke(2.dp, borderBlue),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = login,
+            ),
+            modifier = Modifier
+                .padding(top = 0.dp) // margin
+                .fillMaxWidth(0.85f)
+                .height(160.dp)
+                .padding(16.dp) //margin
+        ) {
+            Text(
+                "Вода",
+                color = textBlue,
+                fontFamily = cruinn_bold,
+                fontSize = 22.sp
+            )
+        }
+
+        OutlinedButton(
+            onClick = {},
+            border = BorderStroke(2.dp, borderBlue),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = orange,
+            ),
+            modifier = Modifier
+                .padding(top = 0.dp) // margin
+                .fillMaxWidth(0.85f)
+                .height(130.dp)
+                .padding(16.dp) //margin
+        ) {
+            Text(
+                "Рецепты",
+                color = textBlue,
+                fontFamily = cruinn_bold,
+                fontSize = 22.sp
+            )
+        }
+
+        OutlinedButton(
+            onClick = {},
+            border = BorderStroke(2.dp, borderBlue),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = page,
+            ),
+            modifier = Modifier
+                .padding(top = 0.dp) // margin
+                .fillMaxWidth(0.85f)
+                .height(100.dp)
+                .padding(16.dp) //margin
+        ) {
+            Text(
+                "Настройки",
+                color = textBlue,
+                fontFamily = cruinn_bold,
+                fontSize = 22.sp
+            )
+        }
+    }
+
 }

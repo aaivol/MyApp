@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel to get all users in the Room database.
+ * ViewModel to maintain Home Screen.
  */
 class HomeViewModel(
     private val appRepository: AppRepository
@@ -43,7 +43,9 @@ class HomeViewModel(
         _currentName = name
     }
 
-
+    /**
+     * Returns the current [UserDetails]
+     */
     val currentUser: MutableState<UserDetailsUiState> = mutableStateOf(UserDetailsUiState())
 
     suspend fun getUser() {
@@ -56,26 +58,6 @@ class HomeViewModel(
                     currentUser.value = it
                 }
         }
-    }
-
-    ///////
-    /**
-     * Returns the [User] found with passed [username]
-     */
-    suspend fun findUser(name: String): User {
-        return appRepository.getUserStream(name)
-            .filterNotNull()
-            .first()
-    }
-
-    /**
-     * Returns the [id] of current User for [Room] relations
-     */
-    suspend fun getCurrentId(uiState: UserDetails): String {
-        val userDbState = findUser(uiState.username)
-            .toUserUiState(true)
-
-        return userDbState.userDetails.id.toString()
     }
 
 }
