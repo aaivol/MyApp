@@ -12,6 +12,8 @@ import com.example.myapp.ui.home.HomeDestination
 import com.example.myapp.ui.home.HomeScreen
 import com.example.myapp.ui.login.LoginScreen
 import com.example.myapp.ui.login.LoginDestination
+import com.example.myapp.ui.settings.SettingsDestination
+import com.example.myapp.ui.settings.SettingsScreen
 import com.example.myapp.ui.signup.SignUpDestination
 import com.example.myapp.ui.signup.SignUpScreen
 
@@ -49,7 +51,14 @@ fun MyAppNavHost(
             )
         }
         composable(route = HomeDestination.route) {
-            HomeScreen(navController)
+            HomeScreen(
+                navigateToSettings = { navController.navigate(SettingsDestination.route) }
+            )
+        }
+        composable(route = SettingsDestination.route) {
+            SettingsScreen(
+                navigateToHome = { navController.navigate(HomeDestination.route) }
+            )
         }
     }
 }

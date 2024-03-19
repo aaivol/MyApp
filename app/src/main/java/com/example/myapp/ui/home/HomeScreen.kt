@@ -61,7 +61,7 @@ object HomeDestination : NavigationDestination {
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun HomeScreen(
-    navController: NavController,
+    navigateToSettings: () -> Unit,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     //get current username from datastore
@@ -95,7 +95,11 @@ fun HomeScreen(
                 userState.value.userDetails
             )
         }
-        HomeMenu()
+        HomeMenu(
+            toSettingsClick = {
+                navigateToSettings()
+            }
+        )
     }
 }
 
@@ -169,6 +173,7 @@ fun HomeText(username: String) {
 
 @Composable
 fun HomeMenu(
+    toSettingsClick: () -> Unit
 ) {
     Column (
         modifier = Modifier
@@ -236,7 +241,7 @@ fun HomeMenu(
         }
 
         OutlinedButton(
-            onClick = {},
+            onClick = toSettingsClick,
             border = BorderStroke(2.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
                 containerColor = page,
