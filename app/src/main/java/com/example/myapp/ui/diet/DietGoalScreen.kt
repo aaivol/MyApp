@@ -53,7 +53,7 @@ fun DietGoalScreen(
         //current user details,
         toFilters = {
             coroutineScope.launch {
-                //viewModel.updateDietOfUser(username, dietId)
+                //viewModel.updateDietOfCurrentUser(username, dietId)
                 navigateToFilters()
             }
         }
