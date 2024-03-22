@@ -95,7 +95,7 @@ fun SettingsBody(
                 containerColor = orange,
             ),
             modifier = Modifier
-                .padding(top = 350.dp) // margin
+                .padding(top = 450.dp) // margin
                 .fillMaxWidth(0.8f)
                 .height(110.dp)
                 .padding(16.dp) //margin
@@ -114,20 +114,13 @@ fun SettingsBody(
 fun LoginTop() {
     Column(
         modifier = Modifier
-            .fillMaxHeight(0.34f)
+            .fillMaxHeight(0.2f)
             .background(login),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.login_circles),
-            contentDescription = "circles",
-            modifier = Modifier
-                .fillMaxWidth()
-        )
-
         Text(
             "НАСТРОЙКИ",
-            fontSize = 30.sp,
+            fontSize = 35.sp,
             fontFamily = cruinn_medium,
             style = TextStyle(
                 brush = Brush.verticalGradient(
@@ -137,7 +130,7 @@ fun LoginTop() {
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 0.dp) //padding
+                .padding(top = 70.dp) //padding
                 .padding(horizontal = 50.dp) //padding
         )
     }

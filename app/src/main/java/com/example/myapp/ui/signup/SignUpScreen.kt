@@ -199,7 +199,7 @@ fun SignUpBodyPreview() {
     SignUpBody(
         userUiState = UserUiState(
             UserDetails(
-                username = "pivk1", password = "1234", dietKey = "1"
+                username = "pivk1", password = "1234", dietId = "1"
             )
         ), onUserValueChange = {}, onCreateClick = {}
     )

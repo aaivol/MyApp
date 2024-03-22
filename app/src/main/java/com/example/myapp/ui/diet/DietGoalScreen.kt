@@ -142,7 +142,7 @@ fun DietGoalButtons(
             OutlinedButton(
                 onClick = {
                     onSelectionChange(diet)
-                    userDetails.dietKey = key.toString()
+                    //userDetails.dietKey = key.toString()
                 },
                 border = BorderStroke(1.dp, borderBlue),
                 colors = ButtonDefaults.buttonColors(
@@ -170,7 +170,7 @@ fun DietGoalBodyPreview() {
     DietGoalBody(
         userUiState = UserUiState(
             UserDetails(
-                username = "pivk1", password = "1234", dietKey = "1"
+                username = "pivk1", password = "1234"
             )
         ),
         toFilters = {}

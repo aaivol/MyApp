@@ -143,7 +143,7 @@ private fun UserProps(
             )
 
             Text(
-                text = "Ваша диета # " + userDetails.dietKey.toString(),
+                text = "Ваша диета # " + userDetails.dietId.toString(),
                 fontSize = 16.sp,
                 color = Color.White,
                 modifier = Modifier
