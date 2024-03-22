@@ -80,15 +80,6 @@ class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
     }
 
     /**
-     * Updates an [User] in the Room database
-     */
-    suspend fun updateUser() {
-        if (validateInput()) {
-            appRepository.updateUser(userUiState.userDetails.toUser())
-        }
-    }
-
-    /**
      * Validates not null definitions of [username] and [password]
      */
     private fun validateInput(uiState: UserDetails = userUiState.userDetails): Boolean {

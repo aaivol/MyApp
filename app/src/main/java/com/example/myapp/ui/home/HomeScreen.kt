@@ -51,7 +51,6 @@ import com.example.myapp.ui.theme.textBlue
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-
 object HomeDestination : NavigationDestination {
     override val route = "home"
     override val titleRes = R.string.app_name

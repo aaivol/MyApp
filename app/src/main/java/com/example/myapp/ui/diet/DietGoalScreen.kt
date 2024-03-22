@@ -40,7 +40,6 @@ import com.example.myapp.ui.theme.page
 import com.example.myapp.ui.theme.textBlue
 import kotlinx.coroutines.launch
 
-
 object DietGoalDestination : NavigationDestination {
     override val route = "diets"
     override val titleRes = R.string.app_name
@@ -56,7 +55,7 @@ fun DietGoalScreen(
     val context = LocalContext.current
     val usernameStored = context.dataStore.data.collectAsState(
         initial = DataStoring()
-    ).value.user.name.toString()
+    ).value.user.name
 
     //update username in viewmodel
     viewModel.updateName(usernameStored)
@@ -65,21 +64,30 @@ fun DietGoalScreen(
     val coroutineScope = rememberCoroutineScope()
 
     DietGoalBody(
-        userState.value.userDetails,
+        loadUser = {
+          coroutineScope.launch {
+                viewModel.getUser()
+            }
+        },
         toFilters = {
             coroutineScope.launch {
-                viewModel.getUser()
+                viewModel.updateUser(userState.value.userDetails)
                 navigateToFilters()
             }
-        }
+        },
+        userState.value.userDetails
     )
 }
 
 @Composable
 fun DietGoalBody(
-    userDetails: UserDetails,
-    toFilters: () -> Unit
+    loadUser: () -> Unit,
+    toFilters: () -> Unit,
+    userDetails: UserDetails
 ) {
+    //load before choosing diet
+    loadUser()
+
     Column(
         modifier = Modifier
             .background(page)
@@ -183,9 +191,10 @@ fun DietGoalButtons(
 @Composable
 fun DietGoalBodyPreview() {
     DietGoalBody(
+        loadUser = {},
+        toFilters = {},
         UserDetails(
             username = "goose", password = "zest", dietId = "1"
-        ),
-        toFilters = {}
+        )
     )
 }

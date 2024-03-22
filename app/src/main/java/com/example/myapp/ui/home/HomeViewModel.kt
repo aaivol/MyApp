@@ -15,6 +15,7 @@ import com.example.myapp.data.user.User
 import com.example.myapp.dataStore
 import com.example.myapp.ui.signup.UserDetails
 import com.example.myapp.ui.signup.UserUiState
+import com.example.myapp.ui.signup.toUser
 import com.example.myapp.ui.signup.toUserDetails
 import com.example.myapp.ui.signup.toUserUiState
 import kotlinx.coroutines.flow.Flow
@@ -41,6 +42,13 @@ class HomeViewModel(
 
     fun updateName(name: String) {
         _currentName = name
+    }
+
+    /**
+     * Updates an [User] in the Room database
+     */
+    suspend fun updateUser(userDetails: UserDetails) {
+        appRepository.updateUser(userDetails.toUser())
     }
 
     /**
