@@ -45,15 +45,15 @@ object DietGoalDestination : NavigationDestination {
 @Composable
 fun DietGoalScreen(
     navigateToFilters: () -> Unit,
-    viewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: DietViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     DietGoalBody(
-        userUiState = viewModel.userUiState,
+        //current user details,
         toFilters = {
             coroutineScope.launch {
-                //viewModel.updateUser()
+                //viewModel.updateDietOfUser(username, dietId)
                 navigateToFilters()
             }
         }
@@ -62,7 +62,7 @@ fun DietGoalScreen(
 
 @Composable
 fun DietGoalBody(
-    userUiState: UserUiState,
+    //userUiState: UserUiState,
     toFilters: () -> Unit
 ) {
     Column(
@@ -73,7 +73,7 @@ fun DietGoalBody(
     ) {
         DietGoalText()
         DietGoalButtons(
-            userDetails = userUiState.userDetails
+            //userDetails = userUiState.userDetails
         )
 
         OutlinedButton(
@@ -112,7 +112,7 @@ fun DietGoalText() {
 
 @Composable
 fun DietGoalButtons(
-    userDetails: UserDetails
+    //userDetails: UserDetails
 ) {
     val diets = listOf(
         "Похудеть",
@@ -168,11 +168,6 @@ fun DietGoalButtons(
 @Composable
 fun DietGoalBodyPreview() {
     DietGoalBody(
-        userUiState = UserUiState(
-            UserDetails(
-                username = "pivk1", password = "1234"
-            )
-        ),
         toFilters = {}
     )
 }

@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.Flow
 interface AppRepository {
     //USERS
     fun getAllUsersStream(): Flow<List<User>>
-    /**
-     * Retrieve an item from the given data source that matches with the username.
-     */
+
     fun getUserStream(username: String): Flow<User?>
+
+    suspend fun updateDietOfUser(username: String, dietId: Int)
 
     suspend fun insertUser(item: User)
 
@@ -19,11 +19,7 @@ interface AppRepository {
 
     suspend fun updateUser(item: User)
 
-
     //DIETS
-    /**
-     * Retrieve relation between Diet and Users 1-N.
-     */
     fun getDietWithUsersStream(dietId: Int): Flow<List<DietWithUsers>>
 
     suspend fun insertDiet(item: Diet)

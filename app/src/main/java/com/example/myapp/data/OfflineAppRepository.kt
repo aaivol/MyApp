@@ -15,6 +15,8 @@ class OfflineAppRepository(
 
         override fun getUserStream(username: String): Flow<User?> = userDao.getUser(username)
 
+        override suspend fun updateDietOfUser(username: String, dietId: Int) = userDao.updateDietOfUser(username, dietId)
+
         override suspend fun insertUser(user: User) = userDao.insert(user)
 
         override suspend fun deleteUser(user: User) = userDao.delete(user)

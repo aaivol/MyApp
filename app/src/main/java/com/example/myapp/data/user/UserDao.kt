@@ -24,4 +24,7 @@ interface UserDao {
 
     @Query("SELECT * from users ORDER BY username ASC")
     fun getAllUsers(): Flow<List<User>>
+
+    @Query("UPDATE users SET dietId = :dietId WHERE username = :username")
+    suspend fun updateDietOfUser(username: String, dietId: Int)
 }

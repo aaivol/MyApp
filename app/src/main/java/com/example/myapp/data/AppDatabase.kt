@@ -14,7 +14,7 @@ import com.example.myapp.data.user.UserDao
         User::class,
         Diet::class
                ],
-    version = 4,
+    version = 5,
     exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
