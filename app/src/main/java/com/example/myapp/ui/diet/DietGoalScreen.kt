@@ -11,6 +11,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,8 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myapp.DataStoring
+import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
+import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.signup.SignUpViewModel
 import com.example.myapp.ui.signup.UserDetails
@@ -45,15 +50,25 @@ object DietGoalDestination : NavigationDestination {
 @Composable
 fun DietGoalScreen(
     navigateToFilters: () -> Unit,
-    viewModel: DietViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    //get current username from datastore
+    val context = LocalContext.current
+    val usernameStored = context.dataStore.data.collectAsState(
+        initial = DataStoring()
+    ).value.user.name.toString()
+
+    //update username in viewmodel
+    viewModel.updateName(usernameStored)
+    val userState = viewModel.currentUser
+
     val coroutineScope = rememberCoroutineScope()
 
     DietGoalBody(
-        //current user details,
+        userState.value.userDetails,
         toFilters = {
             coroutineScope.launch {
-                //viewModel.updateDietOfCurrentUser(username, dietId)
+                viewModel.getUser()
                 navigateToFilters()
             }
         }
@@ -62,7 +77,7 @@ fun DietGoalScreen(
 
 @Composable
 fun DietGoalBody(
-    //userUiState: UserUiState,
+    userDetails: UserDetails,
     toFilters: () -> Unit
 ) {
     Column(
@@ -73,7 +88,7 @@ fun DietGoalBody(
     ) {
         DietGoalText()
         DietGoalButtons(
-            //userDetails = userUiState.userDetails
+            userDetails
         )
 
         OutlinedButton(
@@ -112,7 +127,7 @@ fun DietGoalText() {
 
 @Composable
 fun DietGoalButtons(
-    //userDetails: UserDetails
+    userDetails: UserDetails
 ) {
     val diets = listOf(
         "Похудеть",
@@ -142,7 +157,7 @@ fun DietGoalButtons(
             OutlinedButton(
                 onClick = {
                     onSelectionChange(diet)
-                    //userDetails.dietKey = key.toString()
+                    userDetails.dietId = key.toString()
                 },
                 border = BorderStroke(1.dp, borderBlue),
                 colors = ButtonDefaults.buttonColors(
@@ -168,6 +183,9 @@ fun DietGoalButtons(
 @Composable
 fun DietGoalBodyPreview() {
     DietGoalBody(
+        UserDetails(
+            username = "goose", password = "zest", dietId = "1"
+        ),
         toFilters = {}
     )
 }

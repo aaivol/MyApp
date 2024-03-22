@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.navigation.NavigationDestination
@@ -49,6 +50,8 @@ fun SignUpScreen(
     navigateToDietGoal: () -> Unit,
     viewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val context = LocalContext.current
+
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -62,6 +65,10 @@ fun SignUpScreen(
             onCreateClick = {
                 coroutineScope.launch {
                     viewModel.saveUser()
+
+                    val checkUser = viewModel.userUiState.userDetails
+                    viewModel.setUsername(context, checkUser.username)
+
                     navigateToDietGoal()
                 }
             }

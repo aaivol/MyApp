@@ -7,8 +7,8 @@ class DietViewModel(
     private val appRepository: AppRepository
 ) : ViewModel() {
 
-    suspend fun updateDietOfCurrentUser(username: String, dietId: Int){
-        appRepository.updateDietOfUser(username, dietId)
+    fun updateDietOfUser(username: String, dietId: Int){
+        //
     }
 
     //insert 5 diets
