@@ -22,10 +22,7 @@ interface DietDao {
     @Delete
     suspend fun delete(diet: Diet)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE )
-    suspend fun insertUser(user: User)
-
     @Transaction
     @Query("SELECT * FROM diets WHERE id = :dietId")
-    suspend fun getDietWithUsers(dietId: Int): List<DietWithUsers>
+    fun getDietWithUsers(dietId: Int): Flow<List<DietWithUsers>>
 }

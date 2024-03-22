@@ -4,17 +4,21 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.myapp.data.diet.Diet
+import com.example.myapp.data.diet.DietDao
 import com.example.myapp.data.user.User
 import com.example.myapp.data.user.UserDao
 
 @Database(
     entities = [
-        User::class
+        User::class,
+        Diet::class
                ],
-    version = 3,
+    version = 4,
     exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun dietDao(): DietDao
 
     companion object{
         @Volatile
