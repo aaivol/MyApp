@@ -49,7 +49,7 @@ object DietGoalDestination : NavigationDestination {
 @Composable
 fun DietGoalScreen(
     navigateToFilters: () -> Unit,
-    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     //get current username from datastore
     val context = LocalContext.current
@@ -66,6 +66,7 @@ fun DietGoalScreen(
     DietGoalBody(
         loadUser = {
           coroutineScope.launch {
+                //LOAD USER
                 viewModel.getUser()
             }
         },

@@ -32,9 +32,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapp.DataStoring
+import com.example.myapp.data.diet.Diet
 import com.example.myapp.data.user.User
 import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
+import com.example.myapp.ui.diet.DietViewModel
 import com.example.myapp.ui.login.LoginBody
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.signup.SignUpDestination
@@ -61,18 +63,18 @@ object HomeDestination : NavigationDestination {
 @Composable
 fun HomeScreen(
     navigateToSettings: () -> Unit,
-    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    dietViewModel: DietViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     //get current username from datastore
     val context = LocalContext.current
     val usernameStored = context.dataStore.data.collectAsState(
         initial = DataStoring()
-    ).value.user.name.toString()
+    ).value.user.name
 
     //update username in viewmodel
     viewModel.updateName(usernameStored)
-    val userState = viewModel.currentUser
-
+    val userState = viewModel.currentUser.value.userDetails
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -91,7 +93,8 @@ fun HomeScreen(
                         viewModel.getUser()
                     }
                 },
-                userState.value.userDetails
+                userState,
+                dietViewModel,
             )
         }
         HomeMenu(
@@ -105,7 +108,8 @@ fun HomeScreen(
 @Composable
 private fun UserProps(
     update: () -> Unit,
-    userDetails: UserDetails
+    userDetails: UserDetails,
+    dietVM: DietViewModel
 ) {
     update()
     Column(
@@ -117,55 +121,39 @@ private fun UserProps(
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = "Ваш ID # " + userDetails.id,
-                fontSize = 16.sp,
-                color = textBlue,
-                modifier = Modifier
-                    .padding(0.dp) //margin
-                    .fillMaxWidth()
-                    .background(page)
-                    .height(40.dp)
-                    .padding(10.dp) //padding
-            )
-
-            Text(
-                text = "Ваш никнейм # " + userDetails.username,
-                fontSize = 16.sp,
-                color = textBlue,
-                modifier = Modifier
-                    .padding(0.dp) //margin
-                    .fillMaxWidth()
-                    .background(page)
-                    .height(40.dp)
-                    .padding(10.dp) //padding
-            )
-
-            Text(
-                text = "Ваша диета # " + userDetails.dietId.toString(),
-                fontSize = 16.sp,
-                color = Color.White,
-                modifier = Modifier
-                    .padding(0.dp) //margin
-                    .fillMaxWidth()
-                    .background(login)
-                    .height(40.dp)
-                    .padding(10.dp) //padding
-            )
+            if (userDetails.dietId.isNotBlank()){
+                val diet = dietVM.getDietProps(userDetails.dietId.toInt())
+                DietText(diet)
+            }
         }
     }
 }
 
 @Composable
+fun DietText(currentDiet: Diet) {
+    Text(
+        text = currentDiet.quote,
+        fontSize = 18.sp,
+        color = textBlue,
+        modifier = Modifier
+            .padding(top = 0.dp) //margin
+            .fillMaxWidth()
+            .background(page)
+            .height(80.dp)
+            .padding(horizontal = 40.dp) //padding
+    )
+}
+
+
+@Composable
 fun HomeText(username: String) {
-    Text("Здравствуй, $username !",
+    Text("Приветствую, $username !",
         fontSize = 24.sp,
         color = textBlue,
         modifier = Modifier
-            .padding(0.dp) //margin
+            .padding(top = 80.dp) //margin
             .fillMaxWidth()
-            .height(80.dp)
-            .padding(top = 30.dp) //padding
+            .height(50.dp)
             .padding(horizontal = 40.dp) //padding
     )
 }
@@ -188,7 +176,7 @@ fun HomeMenu(
             modifier = Modifier
                 .padding(top = 10.dp) // margin
                 .fillMaxWidth(0.85f)
-                .height(160.dp)
+                .height(140.dp)
                 .padding(16.dp) //margin
         ) {
             Text(
@@ -208,7 +196,7 @@ fun HomeMenu(
             modifier = Modifier
                 .padding(top = 0.dp) // margin
                 .fillMaxWidth(0.85f)
-                .height(160.dp)
+                .height(140.dp)
                 .padding(16.dp) //margin
         ) {
             Text(
@@ -228,7 +216,7 @@ fun HomeMenu(
             modifier = Modifier
                 .padding(top = 0.dp) // margin
                 .fillMaxWidth(0.85f)
-                .height(130.dp)
+                .height(110.dp)
                 .padding(16.dp) //margin
         ) {
             Text(
