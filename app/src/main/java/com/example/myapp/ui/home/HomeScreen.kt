@@ -36,6 +36,7 @@ import com.example.myapp.data.diet.Diet
 import com.example.myapp.data.user.User
 import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
+import com.example.myapp.ui.diet.DietGoalBody
 import com.example.myapp.ui.diet.DietViewModel
 import com.example.myapp.ui.login.LoginBody
 import com.example.myapp.ui.navigation.NavigationDestination
@@ -63,6 +64,7 @@ object HomeDestination : NavigationDestination {
 @Composable
 fun HomeScreen(
     navigateToSettings: () -> Unit,
+    navigateToFood: () -> Unit,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
     dietViewModel: DietViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
@@ -98,6 +100,9 @@ fun HomeScreen(
             )
         }
         HomeMenu(
+            toFoodClick = {
+                navigateToFood()
+            },
             toSettingsClick = {
                 navigateToSettings()
             }
@@ -160,6 +165,7 @@ fun HomeText(username: String) {
 
 @Composable
 fun HomeMenu(
+    toFoodClick: () -> Unit,
     toSettingsClick: () -> Unit
 ) {
     Column (
@@ -168,7 +174,7 @@ fun HomeMenu(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         OutlinedButton(
-            onClick = {},
+            onClick = toFoodClick,
             border = BorderStroke(2.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
                 containerColor = orange,

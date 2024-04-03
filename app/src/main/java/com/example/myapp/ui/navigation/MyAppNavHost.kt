@@ -8,6 +8,8 @@ import com.example.myapp.ui.filters.FiltersDestination
 import com.example.myapp.ui.filters.FiltersScreen
 import com.example.myapp.ui.diet.DietGoalDestination
 import com.example.myapp.ui.diet.DietGoalScreen
+import com.example.myapp.ui.food.FoodDestination
+import com.example.myapp.ui.food.FoodScreen
 import com.example.myapp.ui.home.HomeDestination
 import com.example.myapp.ui.home.HomeScreen
 import com.example.myapp.ui.login.LoginScreen
@@ -52,11 +54,17 @@ fun MyAppNavHost(
         }
         composable(route = HomeDestination.route) {
             HomeScreen(
-                navigateToSettings = { navController.navigate(SettingsDestination.route) }
+                navigateToSettings = { navController.navigate(SettingsDestination.route) },
+                navigateToFood = { navController.navigate(FoodDestination.route) }
             )
         }
         composable(route = SettingsDestination.route) {
             SettingsScreen(
+                navigateToHome = { navController.navigate(HomeDestination.route) }
+            )
+        }
+        composable(route = FoodDestination.route) {
+            FoodScreen(
                 navigateToHome = { navController.navigate(HomeDestination.route) }
             )
         }
