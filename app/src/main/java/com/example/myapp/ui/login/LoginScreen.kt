@@ -41,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
 import androidx.datastore.dataStore
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -206,6 +207,7 @@ fun InputField(
     TextField(
         value = userDetails.username,
         onValueChange = { onValueChange(userDetails.copy(username = it)) },
+        maxLines = 1,
         label = {
             Text(
                 "Введите никнейм",
@@ -221,7 +223,10 @@ fun InputField(
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
+        ),
         modifier = Modifier
             .padding(top = 10.dp) // margin
             .fillMaxWidth(0.8f)
@@ -233,6 +238,7 @@ fun InputField(
     TextField(
         value = userDetails.password,
         onValueChange = { onValueChange(userDetails.copy(password = it)) },
+        maxLines = 1,
         label = {
             Text(
                 "Введите пароль",
@@ -249,7 +255,10 @@ fun InputField(
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent
         ),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done
+        ),
         modifier = Modifier
             .padding(top = 10.dp) // margin
             .fillMaxWidth(0.8f)

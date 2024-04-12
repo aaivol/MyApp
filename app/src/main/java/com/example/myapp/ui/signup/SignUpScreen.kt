@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.navigation.NavigationDestination
@@ -136,6 +137,7 @@ fun InputUserData(
         TextField(
             value = userDetails.username,
             onValueChange = { onValueChange(userDetails.copy(username = it)) },
+            maxLines = 1,
             label = { Text(
                 "Придумайте $nameMessage",
                 fontSize = 18.sp,
@@ -148,7 +150,10 @@ fun InputUserData(
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
             ),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            ),
             modifier = Modifier
                 .padding(top = 10.dp) // margin
                 .fillMaxWidth(0.8f)
@@ -160,6 +165,7 @@ fun InputUserData(
         TextField(
             value = userDetails.password,
             onValueChange = { onValueChange(userDetails.copy(password = it)) },
+            maxLines = 1,
             label = { Text(
                 "Придумайте $passwMessage",
                 fontSize = 18.sp,
@@ -173,7 +179,10 @@ fun InputUserData(
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent
             ),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
             modifier = Modifier
                 .padding(top = 10.dp) // margin
                 .fillMaxWidth(0.8f)
