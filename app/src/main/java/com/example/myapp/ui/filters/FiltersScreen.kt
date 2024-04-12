@@ -25,10 +25,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,9 +43,14 @@ import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.myapp.DataStoring
+import com.example.myapp.dataStore
+import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.home.HomeDestination
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.theme.borderBlue
@@ -61,9 +68,20 @@ object FiltersDestination : NavigationDestination {
 //FILTERS SCREEN
 @Composable
 fun FiltersScreen(
-    navigateToHome: () -> Unit
-    //viewmodel
+    navigateToHome: () -> Unit,
+    viewmodel: FiltersViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    //get current username from datastore
+    val context = LocalContext.current
+    val usernameStored = context.dataStore.data.collectAsState(
+        initial = DataStoring()
+    ).value.user.name
+
+    //update username in viewmodel
+    viewmodel.updateName(usernameStored)
+    val userState = viewmodel.currentUser.value.userDetails
+    val coroutineScope = rememberCoroutineScope()
+
     FiltersBody(
         toHome = {
             navigateToHome()

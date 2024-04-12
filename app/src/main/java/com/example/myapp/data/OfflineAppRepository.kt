@@ -5,11 +5,14 @@ import com.example.myapp.data.diet.DietDao
 import com.example.myapp.data.relations.DietWithUsers
 import com.example.myapp.data.user.User
 import com.example.myapp.data.user.UserDao
+import com.example.myapp.data.user_filter.UserFilter
+import com.example.myapp.data.user_filter.UserFilterDao
 import kotlinx.coroutines.flow.Flow
 
 class OfflineAppRepository(
         private val userDao: UserDao,
-        private val dietDao: DietDao
+        private val dietDao: DietDao,
+        private val userFilterDao: UserFilterDao
 ) : AppRepository {
         override fun getAllUsersStream(): Flow<List<User>> = userDao.getAllUsers()
 
@@ -30,4 +33,6 @@ class OfflineAppRepository(
         override suspend fun deleteDiet(item: Diet) = dietDao.delete(item)
 
         override suspend fun updateDiet(item: Diet) = dietDao.update(item)
+
+        override suspend fun updateUserFilter(filter: UserFilter) = userFilterDao.update(filter)
 }

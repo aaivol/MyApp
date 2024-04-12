@@ -8,17 +8,21 @@ import com.example.myapp.data.diet.Diet
 import com.example.myapp.data.diet.DietDao
 import com.example.myapp.data.user.User
 import com.example.myapp.data.user.UserDao
+import com.example.myapp.data.user_filter.UserFilter
+import com.example.myapp.data.user_filter.UserFilterDao
 
 @Database(
     entities = [
         User::class,
-        Diet::class
+        Diet::class,
+        UserFilter::class
                ],
-    version = 4,
+    version = 5,
     exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun dietDao(): DietDao
+    abstract fun userFilterDao(): UserFilterDao
 
     companion object{
         @Volatile

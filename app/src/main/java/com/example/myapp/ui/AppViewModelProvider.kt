@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.myapp.MyApp
 import com.example.myapp.ui.diet.DietViewModel
+import com.example.myapp.ui.filters.FiltersViewModel
 import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.signup.SignUpViewModel
 import com.example.myapp.ui.login.LoginViewModel
@@ -29,6 +30,11 @@ object AppViewModelProvider {
         }
         initializer {
             DietViewModel(
+                myapp().container.appRepository
+            )
+        }
+        initializer {
+            FiltersViewModel(
                 myapp().container.appRepository
             )
         }

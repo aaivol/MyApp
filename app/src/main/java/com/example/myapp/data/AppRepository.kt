@@ -1,8 +1,13 @@
 package com.example.myapp.data
 
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Update
 import com.example.myapp.data.diet.Diet
 import com.example.myapp.data.relations.DietWithUsers
 import com.example.myapp.data.user.User
+import com.example.myapp.data.user_filter.UserFilter
 import kotlinx.coroutines.flow.Flow
 
 interface AppRepository {
@@ -27,4 +32,7 @@ interface AppRepository {
     suspend fun deleteDiet(item: Diet)
 
     suspend fun updateDiet(item: Diet)
+
+    //USER FILTERS
+    suspend fun updateUserFilter(filter: UserFilter)
 }
