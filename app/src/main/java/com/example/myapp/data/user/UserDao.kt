@@ -27,4 +27,7 @@ interface UserDao {
 
     @Query("UPDATE users SET dietId = :dietId WHERE username = :username")
     suspend fun updateDietOfUser(username: String, dietId: Int)
+
+    @Query("SELECT filters from users WHERE username = :username")
+    suspend fun getCurrentFilters(username: String): Int
 }

@@ -16,18 +16,6 @@ class FiltersViewModel(
 
     private var _currentName: String = ""
 
-    private val filterList = listOf(
-        "diabetes",
-        "allergy",
-        "fat",
-        "gastritis",
-        "noMeat",
-        "vegan",
-        "noMilk",
-        "pregnant",
-        "lactation"
-    )
-
     fun updateName(name: String) {
         _currentName = name
     }

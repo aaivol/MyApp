@@ -111,6 +111,7 @@ data class UserDetails(
     val username: String = "",
     val password: String = "",
     var dietId: String = "",
+    var filters: String = ""
 )
 
 fun UserDetails.toUser(): User = User(
@@ -118,6 +119,7 @@ fun UserDetails.toUser(): User = User(
     username = username,
     password = password,
     dietId = dietId.toIntOrNull() ?: 0,
+    filters = filters.toIntOrNull() ?: 0
 )
 
 //fun User.formatedPassword(): String {
@@ -137,5 +139,6 @@ fun User.toUserDetails(): UserDetails = UserDetails(
     id = id,
     username = username,
     password = password,
-    dietId = dietId.toString()
+    dietId = dietId.toString(),
+    filters = filters.toString()
 )

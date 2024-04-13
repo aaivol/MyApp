@@ -14,7 +14,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.myapp.data.AppDatabase
 import com.example.myapp.data.AppRepository
 import com.example.myapp.data.diet.Diet
-import com.example.myapp.data.diet.DietDao
 import com.example.myapp.ui.diet.DietViewModel
 import com.example.myapp.ui.navigation.MyAppNavHost
 import com.example.myapp.ui.theme.MyAppTheme

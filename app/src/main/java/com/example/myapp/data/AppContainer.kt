@@ -14,9 +14,7 @@ class AppDataContainer(private val context: Context) : AppContainer {
      */
     override val appRepository: AppRepository by lazy {
         OfflineAppRepository(
-            AppDatabase.getDatabase(context).userDao(),
-            AppDatabase.getDatabase(context).dietDao(),
-            AppDatabase.getDatabase(context).userFilterDao()
+            AppDatabase.getDatabase(context).userDao()
         )
     }
 }
