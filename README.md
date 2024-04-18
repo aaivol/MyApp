@@ -3,8 +3,6 @@
 > “I know once people get connected to real food, they never change back.”
 > – Alice Waters
 
-#### Link to Figma
-
 Link to [Figma][1].
 
 [1]: https://www.figma.com/file/O1L6qu8Gfs2LPmGcpg0PDt/Diploma?type=design&node-id=0-1&mode=design&t=4AjlcKTnAyprLIq1-0      "Figma"
