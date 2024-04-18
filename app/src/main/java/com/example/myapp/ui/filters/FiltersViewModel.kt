@@ -13,15 +13,4 @@ import com.example.myapp.ui.signup.UserDetails
 class FiltersViewModel(
     private val appRepository: AppRepository
 ) : ViewModel() {
-
-    private var _currentName: String = ""
-
-    fun updateName(name: String) {
-        _currentName = name
-    }
-
-    /**
-     * Returns the current [UserDetails]
-     */
-    val currentUser: MutableState<UserDetailsUiState> = mutableStateOf(UserDetailsUiState())
 }

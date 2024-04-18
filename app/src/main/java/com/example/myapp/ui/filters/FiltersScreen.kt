@@ -49,9 +49,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapp.DataStoring
+import com.example.myapp.data.user_filter.nameToBit
 import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.home.HomeDestination
+import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.login
@@ -59,6 +61,7 @@ import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.page
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
+import kotlinx.coroutines.launch
 
 object FiltersDestination : NavigationDestination {
     override val route = "filters"
@@ -69,7 +72,7 @@ object FiltersDestination : NavigationDestination {
 @Composable
 fun FiltersScreen(
     navigateToHome: () -> Unit,
-    viewmodel: FiltersViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewmodel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     //get current username from datastore
     val context = LocalContext.current
@@ -82,8 +85,17 @@ fun FiltersScreen(
     val userState = viewmodel.currentUser.value.userDetails
     val coroutineScope = rememberCoroutineScope()
 
+    var selectedBits = remember {
+        mutableStateListOf<Int>()
+    }
+
     FiltersBody(
+        selectedBits,
         toHome = {
+            coroutineScope.launch {
+                //TODO: push updates to db
+                userState.filters = viewmodel.updateFilters(selectedBits).toString()
+            }
             navigateToHome()
         }
     )
@@ -91,6 +103,7 @@ fun FiltersScreen(
 
 @Composable
 fun FiltersBody(
+    selectedBits: MutableList<Int>,
     toHome: () -> Unit
 ) {
     Column(
@@ -100,7 +113,9 @@ fun FiltersBody(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         FiltersText()
-        DietGoalButtons()
+        DietGoalButtons(
+            selectedBits
+        )
         OutlinedButton(
             onClick = toHome,
             //connect to viewmodel with filters
@@ -137,14 +152,16 @@ fun FiltersText() {
     )
 }
 @Composable
-fun DietGoalButtons() {
+fun DietGoalButtons(
+    selectedBits: MutableList<Int>
+) {
     val filters = listOf(
         "Диабет",
         "Аллергия",
         "Ожирение",
         "Гастрит",
-        "Веган",
         "Без мяса",
+        "Веган",
         "Без молока",
         "Жду ребенка",
         "Кормление",
@@ -153,8 +170,10 @@ fun DietGoalButtons() {
     var selectedFilters = remember {
         mutableStateListOf<String>()
     }
+
     val onSelectionChange = { filter: String ->
         selectedFilters.add(filter)
+        selectedBits.add(filters.indexOf(filter))
     }
 
     Column(
@@ -170,17 +189,14 @@ fun DietGoalButtons() {
             val len = filter.length
             val btnwid = (len * 22).dp
 
-            //KEY for DATABASE
-            val key: Int = filters.indexOf(filter) + 1
-
             OutlinedButton(
                 onClick = {
                     if (isSelected) {
                         selectedFilters.remove(filter)
+                        selectedBits.remove(filters.indexOf(filter))
                     }
                     else {
                         onSelectionChange(filter)
-                        //viewmodel-send-key
                     }
                 },
                 border = BorderStroke(1.dp, borderBlue),
@@ -201,13 +217,4 @@ fun DietGoalButtons() {
             }
         }
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun FiltersBodyPreview() {
-    FiltersBody(
-        toHome = {}
-    )
 }

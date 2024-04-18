@@ -1,6 +1,7 @@
 package com.example.myapp.ui.home
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,6 +13,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.myapp.DataStoring
 import com.example.myapp.data.AppRepository
 import com.example.myapp.data.user.User
+import com.example.myapp.data.user_filter.FilterNames
+import com.example.myapp.data.user_filter.getBit
+import com.example.myapp.data.user_filter.getNewFilters
+import com.example.myapp.data.user_filter.nameToBit
+import com.example.myapp.data.user_filter.setBit
 import com.example.myapp.dataStore
 import com.example.myapp.ui.signup.UserDetails
 import com.example.myapp.ui.signup.UserUiState
@@ -68,10 +74,39 @@ class HomeViewModel(
         }
     }
 
+    suspend fun checkCurrentFilters() {
+        val currentFilter = appRepository.getCurrentFilters(_currentName)
+
+        FilterNames.values().forEach {
+            val currentBit = currentFilter.getBit(nameToBit[it.name]!!).toString()
+            Log.d("CHECK_FILTER", it.filterName)
+            Log.d("BIT", currentBit)
+        }
+    }
+
+    suspend fun updateFilters(uiSelectedBits: MutableList<Int>): Int {
+        //filter Integer of current User
+        val currentFilter = appRepository.getCurrentFilters(_currentName)
+        var updatedFilter = 0
+
+        FilterNames.values().forEach {
+            //bit of each FilterNames value
+            val currentBit = nameToBit[it.name]!!
+
+            //if bit of current Filter Name is selected on UI
+            val isSelected = uiSelectedBits.contains(currentBit)
+            if (isSelected) {
+               updatedFilter = currentFilter.setBit(currentBit, 1)
+            }
+        }
+
+        return updatedFilter
+    }
+
 }
 
 /**
- * UI state for ItemDetailsScreen
+ * UI state for UserDetailsScreen
  */
 data class UserDetailsUiState(
     val userDetails: UserDetails = UserDetails()

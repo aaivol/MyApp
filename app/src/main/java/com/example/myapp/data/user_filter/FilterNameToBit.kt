@@ -1,5 +1,6 @@
 package com.example.myapp.data.user_filter
 
+import com.example.myapp.data.user.UserDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -14,11 +15,12 @@ val nameToBit = mapOf(
     FilterNames.PREGNANT.name to FilterBits.PREGNANT_BIT.bit,
     FilterNames.LACTATION.name to FilterBits.LACTATION_BIT.bit,
 )
+
 fun Int.setBit(bit: Int, value: Int): Int {
     return if (value == 1) {
         this or (1 shl bit)
     } else {
-        this and (1 shl bit).inv()
+        this or (1 shl bit).inv()
     }
 }
 
@@ -26,9 +28,8 @@ fun Int.getBit(bit: Int): Int {
     return if (this and (1 shl bit) == 0) 0 else 1
 }
 
-suspend fun getNewFilters(filterName: FilterNames, value: Int): Int {
+suspend fun getNewFilters(currentValue: Int, filterName: FilterNames, value: Int): Int {
     return withContext(Dispatchers.IO) {
-        val currentValue = 0 // TODO: get current value from db
         currentValue.setBit(nameToBit[filterName.name]!!, value)
     }
 }
