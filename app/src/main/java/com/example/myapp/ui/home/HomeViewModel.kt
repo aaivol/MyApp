@@ -84,23 +84,24 @@ class HomeViewModel(
         }
     }
 
-    suspend fun updateFilters(uiSelectedBits: MutableList<Int>): Int {
-        //filter Integer of current User
+    suspend fun updateFilters(uiSelectedBits: MutableList<Int>) {
+        // filter Integer of current User
         val currentFilter = appRepository.getCurrentFilters(_currentName)
         var updatedFilter = 0
 
         FilterNames.values().forEach {
-            //bit of each FilterNames value
+            // bit of each FilterNames value
             val currentBit = nameToBit[it.name]!!
 
-            //if bit of current Filter Name is selected on UI
+            // if bit of current Filter Name is selected on UI
             val isSelected = uiSelectedBits.contains(currentBit)
             if (isSelected) {
                updatedFilter = currentFilter.setBit(currentBit, 1)
             }
         }
 
-        return updatedFilter
+        // push updates
+        appRepository.updateFilters(_currentName, updatedFilter)
     }
 
 }

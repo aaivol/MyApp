@@ -94,7 +94,7 @@ fun FiltersScreen(
         toHome = {
             coroutineScope.launch {
                 //TODO: push updates to db
-                userState.filters = viewmodel.updateFilters(selectedBits).toString()
+                viewmodel.updateFilters(selectedBits)
             }
             navigateToHome()
         }

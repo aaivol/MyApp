@@ -20,4 +20,6 @@ interface AppRepository {
     suspend fun updateUser(item: User)
 
     suspend fun getCurrentFilters(username: String): Int
+
+    suspend fun updateFilters(username: String, newfilters: Int)
 }

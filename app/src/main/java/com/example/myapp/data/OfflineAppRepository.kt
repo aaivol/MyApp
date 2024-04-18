@@ -18,4 +18,6 @@ class OfflineAppRepository(
         override suspend fun updateUser(user: User) = userDao.update(user)
 
         override suspend fun getCurrentFilters(username: String): Int = userDao.getCurrentFilters(username)
+
+        override suspend fun updateFilters(username: String, newfilters: Int) = userDao.updateFilters(username, newfilters)
 }
