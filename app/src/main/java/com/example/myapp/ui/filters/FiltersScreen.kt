@@ -93,7 +93,6 @@ fun FiltersScreen(
         selectedBits,
         toHome = {
             coroutineScope.launch {
-                //TODO: push updates to db
                 viewmodel.updateFilters(selectedBits)
             }
             navigateToHome()

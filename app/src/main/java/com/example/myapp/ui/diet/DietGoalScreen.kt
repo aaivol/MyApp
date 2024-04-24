@@ -72,6 +72,9 @@ fun DietGoalScreen(
         },
         toFilters = {
             coroutineScope.launch {
+                if (userState.value.userDetails.dietId == "0"){
+                    userState.value.userDetails.dietId = "1"
+                }
                 viewModel.updateUser(userState.value.userDetails)
                 navigateToFilters()
             }
@@ -160,13 +163,10 @@ fun DietGoalButtons(
         diets.forEach { diet ->
             val color = if (selectedDiet == diet) orange else login
 
-            //KEY for DATABASE
-            val key: Int = diets.indexOf(diet) + 1
-
             OutlinedButton(
                 onClick = {
                     onSelectionChange(diet)
-                    userDetails.dietId = key.toString()
+                    userDetails.dietId = diets.indexOf(selectedDiet).toString()
                 },
                 border = BorderStroke(1.dp, borderBlue),
                 colors = ButtonDefaults.buttonColors(
@@ -179,7 +179,7 @@ fun DietGoalButtons(
                     .padding(8.dp)
             ) {
                 Text(
-                    diet + key.toString(),
+                    diet,
                     color = textBlue,
                     fontSize = 18.sp
                 )

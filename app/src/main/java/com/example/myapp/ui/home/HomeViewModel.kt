@@ -3,9 +3,12 @@ package com.example.myapp.ui.home
 import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
@@ -44,11 +47,14 @@ class HomeViewModel(
     private val appRepository: AppRepository
 ) : ViewModel() {
 
-    private var _currentName: String = ""
+    private var _currentName: MutableState<String> = mutableStateOf("")
 
     fun updateName(name: String) {
-        _currentName = name
+        _currentName.value = name
     }
+
+    private var _currentFilters: MutableState<List<String>> = mutableStateOf(emptyList())
+    val currentFilters by _currentFilters
 
     /**
      * Updates an [User] in the Room database
@@ -64,7 +70,7 @@ class HomeViewModel(
 
     suspend fun getUser() {
         viewModelScope.launch {
-            appRepository.getUserStream(_currentName)
+            appRepository.getUserStream(_currentName.value)
                 .filterNotNull()
                 .map {
                     UserDetailsUiState(userDetails = it.toUserDetails())
@@ -74,19 +80,24 @@ class HomeViewModel(
         }
     }
 
+    /**
+     * Returns the current [UserDetails]
+     */
     suspend fun checkCurrentFilters() {
-        val currentFilter = appRepository.getCurrentFilters(_currentName)
-
+        val currentFilter = appRepository.getCurrentFilters(_currentName.value)
         FilterNames.values().forEach {
-            val currentBit = currentFilter.getBit(nameToBit[it.name]!!).toString()
-            Log.d("CHECK_FILTER", it.filterName)
-            Log.d("BIT", currentBit)
+            val filterBit = currentFilter.getBit(nameToBit[it.name]!!)
+            if (filterBit == 1){
+                if (!_currentFilters.value.contains(it.name)){
+                    _currentFilters.value = _currentFilters.value + it.name
+                }
+            }
         }
     }
 
     suspend fun updateFilters(uiSelectedBits: MutableList<Int>) {
         // filter Integer of current User
-        val currentFilter = appRepository.getCurrentFilters(_currentName)
+        val currentFilter = appRepository.getCurrentFilters(_currentName.value)
         var updatedFilter = 0
 
         FilterNames.values().forEach {
@@ -96,12 +107,12 @@ class HomeViewModel(
             // if bit of current Filter Name is selected on UI
             val isSelected = uiSelectedBits.contains(currentBit)
             if (isSelected) {
-               updatedFilter = currentFilter.setBit(currentBit, 1)
+               updatedFilter += currentFilter.setBit(currentBit, 1)
             }
         }
 
         // push updates
-        appRepository.updateFilters(_currentName, updatedFilter)
+        appRepository.updateFilters(_currentName.value, updatedFilter)
     }
 
 }

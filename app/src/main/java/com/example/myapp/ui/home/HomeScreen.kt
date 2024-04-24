@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -34,8 +35,10 @@ import androidx.navigation.NavController
 import com.example.myapp.DataStoring
 import com.example.myapp.data.diet.Diet
 import com.example.myapp.data.user.User
+import com.example.myapp.data.user_filter.FilterNames
 import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
+import com.example.myapp.ui.components.Loading
 import com.example.myapp.ui.diet.DietGoalBody
 import com.example.myapp.ui.diet.DietViewModel
 import com.example.myapp.ui.login.LoginBody
@@ -79,6 +82,9 @@ fun HomeScreen(
     val userState = viewModel.currentUser.value.userDetails
     val coroutineScope = rememberCoroutineScope()
 
+    //filters
+    val userFilters = viewModel.currentFilters
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -93,10 +99,12 @@ fun HomeScreen(
                     coroutineScope.launch {
                         //get properties from Room database
                         viewModel.getUser()
+                        viewModel.checkCurrentFilters()
                     }
                 },
                 userState,
                 dietViewModel,
+                userFilters
             )
         }
         HomeMenu(
@@ -114,7 +122,8 @@ fun HomeScreen(
 private fun UserProps(
     update: () -> Unit,
     userDetails: UserDetails,
-    dietVM: DietViewModel
+    dietVM: DietViewModel,
+    userFilters: List<String>
 ) {
     update()
     Column(
@@ -126,11 +135,22 @@ private fun UserProps(
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (userDetails.dietId.isNotBlank()){
+            if (userDetails.dietId.isNotBlank()) {
                 val diet = dietVM.getDietProps(userDetails.dietId.toInt())
                 DietText(diet)
             }
         }
+
+        when {
+            userDetails.username == null -> Loading()
+            else -> Column {
+                userFilters.forEach{
+                    Filters(name = it)
+                }
+
+            }
+        }
+
     }
 }
 
@@ -159,6 +179,17 @@ fun HomeText(username: String) {
             .padding(top = 80.dp) //margin
             .fillMaxWidth()
             .height(50.dp)
+            .padding(horizontal = 40.dp) //padding
+    )
+}
+
+@Composable
+fun Filters(name: String){
+    Text(" $name ",
+        fontSize = 14.sp,
+        color = textBlue,
+        modifier = Modifier
+            .height(40.dp)
             .padding(horizontal = 40.dp) //padding
     )
 }
