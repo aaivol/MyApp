@@ -68,6 +68,7 @@ object HomeDestination : NavigationDestination {
 fun HomeScreen(
     navigateToSettings: () -> Unit,
     navigateToFood: () -> Unit,
+    navigateToRecipes: () -> Unit,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
     dietViewModel: DietViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
@@ -113,6 +114,9 @@ fun HomeScreen(
             },
             toSettingsClick = {
                 navigateToSettings()
+            },
+            toRecipesClick = {
+                navigateToRecipes()
             }
         )
     }
@@ -176,7 +180,7 @@ fun HomeText(username: String) {
         fontSize = 24.sp,
         color = textBlue,
         modifier = Modifier
-            .padding(top = 80.dp) //margin
+            .padding(top = 40.dp) //margin
             .fillMaxWidth()
             .height(50.dp)
             .padding(horizontal = 40.dp) //padding
@@ -197,7 +201,8 @@ fun Filters(name: String){
 @Composable
 fun HomeMenu(
     toFoodClick: () -> Unit,
-    toSettingsClick: () -> Unit
+    toSettingsClick: () -> Unit,
+    toRecipesClick: () -> Unit
 ) {
     Column (
         modifier = Modifier
@@ -245,7 +250,7 @@ fun HomeMenu(
         }
 
         OutlinedButton(
-            onClick = {},
+            onClick = toRecipesClick,
             border = BorderStroke(2.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
                 containerColor = orange,

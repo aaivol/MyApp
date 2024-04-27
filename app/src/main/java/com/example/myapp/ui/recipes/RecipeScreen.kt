@@ -1,4 +1,4 @@
-package com.example.myapp.ui.food
+package com.example.myapp.ui.recipes
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -32,17 +32,17 @@ import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.page
 import com.example.myapp.ui.theme.textBlue
 
-object FoodDestination : NavigationDestination {
-    override val route = "food"
+object RecipeDestination : NavigationDestination {
+    override val route = "recipes"
     override val titleRes = R.string.app_name
 }
 
-//FOOD SCREEN
+//RECIPE SCREEN
 @Composable
-fun FoodScreen(
+fun RecipeScreen(
     navigateToHome: () -> Unit
 ) {
-    FoodBody(
+    RecipeBody(
         toHome = {
             navigateToHome()
         }
@@ -50,7 +50,7 @@ fun FoodScreen(
 }
 
 @Composable
-fun FoodBody(
+fun RecipeBody(
     toHome: () -> Unit
 ) {
     Column(
@@ -59,7 +59,7 @@ fun FoodBody(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        FoodTop()
+        RecipeTop()
         OutlinedButton(
             onClick = toHome,
             //connect to viewmodel with filters
@@ -83,7 +83,7 @@ fun FoodBody(
 }
 
 @Composable
-fun FoodTop() {
+fun RecipeTop() {
     Column(
         modifier = Modifier
             .fillMaxHeight(0.2f)
@@ -91,7 +91,7 @@ fun FoodTop() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            "ПИТАНИЕ",
+            "РЕЦЕПТЫ",
             fontSize = 35.sp,
             fontFamily = cruinn_medium,
             style = TextStyle(
@@ -110,8 +110,8 @@ fun FoodTop() {
 
 @Preview(showBackground = true)
 @Composable
-fun FoodBodyPreview() {
-    FoodBody(
+fun RecipeBodyPreview() {
+    RecipeBody(
         toHome = {}
     )
 }

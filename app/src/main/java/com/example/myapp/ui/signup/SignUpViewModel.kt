@@ -66,10 +66,6 @@ class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
         return false
     }
 
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
-    }
-
     /**
      * Inserts an [User] in the Room database
      */

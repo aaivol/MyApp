@@ -14,6 +14,8 @@ import com.example.myapp.ui.home.HomeDestination
 import com.example.myapp.ui.home.HomeScreen
 import com.example.myapp.ui.login.LoginScreen
 import com.example.myapp.ui.login.LoginDestination
+import com.example.myapp.ui.recipes.RecipeDestination
+import com.example.myapp.ui.recipes.RecipeScreen
 import com.example.myapp.ui.settings.SettingsDestination
 import com.example.myapp.ui.settings.SettingsScreen
 import com.example.myapp.ui.signup.SignUpDestination
@@ -55,7 +57,8 @@ fun MyAppNavHost(
         composable(route = HomeDestination.route) {
             HomeScreen(
                 navigateToSettings = { navController.navigate(SettingsDestination.route) },
-                navigateToFood = { navController.navigate(FoodDestination.route) }
+                navigateToFood = { navController.navigate(FoodDestination.route) },
+                navigateToRecipes = { navController.navigate(RecipeDestination.route) }
             )
         }
         composable(route = SettingsDestination.route) {
@@ -65,6 +68,11 @@ fun MyAppNavHost(
         }
         composable(route = FoodDestination.route) {
             FoodScreen(
+                navigateToHome = { navController.navigate(HomeDestination.route) }
+            )
+        }
+        composable(route = RecipeDestination.route) {
+            RecipeScreen(
                 navigateToHome = { navController.navigate(HomeDestination.route) }
             )
         }

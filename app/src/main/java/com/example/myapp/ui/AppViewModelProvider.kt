@@ -11,6 +11,7 @@ import com.example.myapp.ui.filters.FiltersViewModel
 import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.signup.SignUpViewModel
 import com.example.myapp.ui.login.LoginViewModel
+import com.example.myapp.ui.recipes.RecipeViewModel
 
 /**
  * Provides Factory to create instance of ViewModel for the entire Inventory app
@@ -40,6 +41,11 @@ object AppViewModelProvider {
         }
         initializer {
             HomeViewModel(
+                myapp().container.appRepository
+            )
+        }
+        initializer {
+            RecipeViewModel(
                 myapp().container.appRepository
             )
         }
