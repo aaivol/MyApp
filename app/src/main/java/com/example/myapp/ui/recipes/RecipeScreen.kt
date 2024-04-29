@@ -13,24 +13,39 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myapp.DataStoring
 import com.example.myapp.R
+import com.example.myapp.dataStore
+import com.example.myapp.ui.AppViewModelProvider
+import com.example.myapp.ui.components.Loading
+import com.example.myapp.ui.components.RecipeCard
+import com.example.myapp.ui.diet.DietViewModel
+import com.example.myapp.ui.filters.FiltersViewModel
+import com.example.myapp.ui.home.Filters
+import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.navigation.NavigationDestination
+import com.example.myapp.ui.signup.UserDetails
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.cruinn_medium
 import com.example.myapp.ui.theme.login
 import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.page
 import com.example.myapp.ui.theme.textBlue
+import kotlinx.coroutines.launch
 
 object RecipeDestination : NavigationDestination {
     override val route = "recipes"
@@ -40,19 +55,58 @@ object RecipeDestination : NavigationDestination {
 //RECIPE SCREEN
 @Composable
 fun RecipeScreen(
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    recipeViewModel: RecipeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
+    //get current username from datastore
+    val context = LocalContext.current
+    val usernameStored = context.dataStore.data.collectAsState(
+        initial = DataStoring()
+    ).value.user.name
+
+    //update username in viewmodel
+    homeViewModel.updateName(usernameStored)
+    val userState = homeViewModel.currentUser.value.userDetails
+    val coroutineScope = rememberCoroutineScope()
+
+    //filters
+    val userFilters = homeViewModel.currentFilters
     RecipeBody(
+        updateState = {
+            coroutineScope.launch {
+                //get properties from Room database
+                homeViewModel.getUser()
+            }
+        },
         toHome = {
             navigateToHome()
-        }
+        },
+        userState,
+        recipeViewModel,
+        homeViewModel
     )
 }
 
 @Composable
 fun RecipeBody(
-    toHome: () -> Unit
+    updateState: () -> Unit,
+    toHome: () -> Unit,
+    userDetails: UserDetails,
+    recipeViewModel: RecipeViewModel,
+    homeViewModel: HomeViewModel
 ) {
+    updateState()
+
+    /*
+    recipeViewModel.recipes.forEach {
+        if (it.compareFilters(homeViewModel.currentFilters)){
+            RecipeCard(recipeItem = it)
+        }
+    }
+   
+     */
+
     Column(
         modifier = Modifier
             .background(page)
@@ -60,6 +114,17 @@ fun RecipeBody(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         RecipeTop()
+
+        when {
+            userDetails.username == null -> Loading()
+            else -> Column {
+                recipeViewModel.recipes.forEach {
+                    RecipeCard(recipeItem = it)
+                }
+
+            }
+        }
+
         OutlinedButton(
             onClick = toHome,
             //connect to viewmodel with filters
@@ -68,7 +133,7 @@ fun RecipeBody(
                 containerColor = orange,
             ),
             modifier = Modifier
-                .padding(top = 450.dp) // margin
+                .padding(top = 150.dp) // margin
                 .fillMaxWidth(0.9f)
                 .height(100.dp)
                 .padding(10.dp) //padding
@@ -106,12 +171,4 @@ fun RecipeTop() {
                 .padding(horizontal = 50.dp) //padding
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun RecipeBodyPreview() {
-    RecipeBody(
-        toHome = {}
-    )
 }
