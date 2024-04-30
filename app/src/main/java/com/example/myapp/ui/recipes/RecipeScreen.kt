@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -77,6 +79,7 @@ fun RecipeScreen(
             coroutineScope.launch {
                 //get properties from Room database
                 homeViewModel.getUser()
+                homeViewModel.checkCurrentFilters()
             }
         },
         toHome = {
@@ -98,15 +101,6 @@ fun RecipeBody(
 ) {
     updateState()
 
-    /*
-    recipeViewModel.recipes.forEach {
-        if (it.compareFilters(homeViewModel.currentFilters)){
-            RecipeCard(recipeItem = it)
-        }
-    }
-   
-     */
-
     Column(
         modifier = Modifier
             .background(page)
@@ -115,14 +109,26 @@ fun RecipeBody(
     ) {
         RecipeTop()
 
-        when {
-            userDetails.username == null -> Loading()
-            else -> Column {
-                recipeViewModel.recipes.forEach {
-                    RecipeCard(recipeItem = it)
-                }
+        Column(
+            modifier = Modifier
+                .background(page)
+                .padding(vertical = 20.dp)
+                .verticalScroll(rememberScrollState())
+                .weight(weight = 1f, fill = false),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            when {
+                userDetails.username == null -> Loading()
+                else -> Column {
+                    recipeViewModel.recipes.forEach {
+                        if (it.compareFilters(homeViewModel.currentFilters)){
+                            RecipeCard(recipeItem = it)
+                        }
+                    }
 
+                }
             }
+
         }
 
         OutlinedButton(
@@ -133,7 +139,7 @@ fun RecipeBody(
                 containerColor = orange,
             ),
             modifier = Modifier
-                .padding(top = 150.dp) // margin
+                .padding(top = 20.dp) // margin
                 .fillMaxWidth(0.9f)
                 .height(100.dp)
                 .padding(10.dp) //padding
@@ -144,6 +150,7 @@ fun RecipeBody(
                 fontSize = 20.sp
             )
         }
+
     }
 }
 

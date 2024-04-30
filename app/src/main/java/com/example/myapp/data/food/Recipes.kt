@@ -16,7 +16,12 @@ data class Recipe(
 ){
     fun compareFilters(currentUserFilter: List<String>): Boolean {
         currentUserFilter.forEach {
+           if (suitableFilters.isEmpty() or currentUserFilter.isEmpty()) {
+               //suit for all OR user has not filters
+               return true
+           }
            if (!suitableFilters.contains(it)){
+               //check if recipe suit for user
                return false
            }
         }
