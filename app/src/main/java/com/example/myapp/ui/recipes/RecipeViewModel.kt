@@ -2,6 +2,7 @@ package com.example.myapp.ui.recipes
 
 import androidx.compose.material.icons.Icons
 import androidx.lifecycle.ViewModel
+import com.example.myapp.R
 import com.example.myapp.data.AppRepository
 import com.example.myapp.data.food.Recipe
 import com.example.myapp.data.user_filter.FilterNames
@@ -14,7 +15,7 @@ class RecipeViewModel(
             1,
             "Карбонара",
             "Основное",
-            "",
+            R.drawable.carbonara,
             "30 минут",
             listOf("Ветчина", "Яйцо", "Сливки 20%", "Чеснок", "Паста"),
             275,
@@ -30,7 +31,7 @@ class RecipeViewModel(
             2,
             "Весенний салат",
             "Салат",
-            "",
+            R.drawable.salad,
             "15 минут",
             listOf("Огурцы", "Томаты", "Тофу"),
             55,
@@ -43,7 +44,7 @@ class RecipeViewModel(
             3,
             "Творожная запеканка с тыквой",
             "Основное",
-            "",
+            R.drawable.tykva,
             "50 минут",
             listOf("Сметана", "Тыква", "Творог", "Зелень"),
             150,
@@ -64,7 +65,7 @@ class RecipeViewModel(
             4,
             "Семга на пару",
             "Основное",
-            "",
+            R.drawable.semga,
             "20 минут",
             listOf("Стейк семги", "Розмарин"),
             197,
@@ -84,7 +85,7 @@ class RecipeViewModel(
             5,
             "Гратен Дофинуа",
             "Основное",
-            "",
+            R.drawable.graten,
             "40 минут",
             listOf("Картофель", "Сливки", "Мускатный орех"),
             172,
@@ -103,7 +104,7 @@ class RecipeViewModel(
             6,
             "Cуп из цветной капусты",
             "Суп",
-            "",
+            R.drawable.soup_capusta,
             "35 минут",
             listOf("Цветная капуста", "Репчатый лук", "Картофель", "Морковь"),
             31,
@@ -115,7 +116,7 @@ class RecipeViewModel(
             7,
             "Рис с грибами и томатами",
             "Гарнир",
-            "",
+            R.drawable.rice,
             "15 минут",
             listOf("Рис", "Шампиньоны", "Томаты"),
             55,

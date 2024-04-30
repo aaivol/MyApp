@@ -28,11 +28,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapp.DataStoring
+import com.example.myapp.R
 import com.example.myapp.data.food.Recipe
 import com.example.myapp.data.user_filter.FilterNames
 import com.example.myapp.dataStore
@@ -62,13 +64,14 @@ fun RecipeCard(
             .fillMaxWidth(0.9f)
             .padding(vertical = 20.dp),
     ){
-        Text(
-            text = "IMAGE",
+        val source = recipeItem.imageUrl
+        Image(
+            painter = painterResource(id = source),
+            contentDescription = "",
             modifier = Modifier
-                .fillMaxWidth(0.4f)
+                .width(130.dp)
                 .fillMaxHeight(0.75f)
                 .padding(horizontal = 15.dp)
-                .background(orange)
         )
 
         Column(
@@ -111,7 +114,7 @@ fun RecipeCardPreview() {
             1,
             "Карбонара",
             "Основное",
-            "",
+            0,
             "30 минут",
             listOf("Ветчина", "Яйцо", "Сливки 20%", "Чеснок", "Паста"),
             275,
