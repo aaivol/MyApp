@@ -107,7 +107,10 @@ data class UserDetails(
     val username: String = "",
     val password: String = "",
     var dietId: String = "",
-    var filters: String = ""
+    var filters: String = "",
+    var breakfast: Int = 0,
+    var lunch: Int = 0,
+    var dinner: Int = 0
 )
 
 fun UserDetails.toUser(): User = User(
@@ -115,7 +118,10 @@ fun UserDetails.toUser(): User = User(
     username = username,
     password = password,
     dietId = dietId.toIntOrNull() ?: 0,
-    filters = filters.toIntOrNull() ?: 0
+    filters = filters.toIntOrNull() ?: 0,
+    breakfast = breakfast,
+    lunch = lunch,
+    dinner = dinner
 )
 
 //fun User.formatedPassword(): String {
@@ -136,5 +142,8 @@ fun User.toUserDetails(): UserDetails = UserDetails(
     username = username,
     password = password,
     dietId = dietId.toString(),
-    filters = filters.toString()
+    filters = filters.toString(),
+    breakfast = breakfast,
+    lunch = lunch,
+    dinner = dinner
 )

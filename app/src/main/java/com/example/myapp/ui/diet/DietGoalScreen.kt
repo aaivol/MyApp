@@ -166,7 +166,7 @@ fun DietGoalButtons(
             OutlinedButton(
                 onClick = {
                     onSelectionChange(diet)
-                    userDetails.dietId = diets.indexOf(selectedDiet).toString()
+                    userDetails.dietId = (diets.indexOf(selectedDiet) + 1).toString()
                 },
                 border = BorderStroke(1.dp, borderBlue),
                 colors = ButtonDefaults.buttonColors(

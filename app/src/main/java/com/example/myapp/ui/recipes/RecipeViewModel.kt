@@ -116,7 +116,7 @@ class RecipeViewModel(
             7,
             "Рис с грибами и томатами",
             "Гарнир",
-            R.drawable.rice,
+            R.drawable.rice ,
             "15 минут",
             listOf("Рис", "Шампиньоны", "Томаты"),
             55,

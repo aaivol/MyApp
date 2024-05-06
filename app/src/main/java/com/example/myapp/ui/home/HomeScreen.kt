@@ -262,7 +262,7 @@ fun HomeMenu(
                 .padding(16.dp) //margin
         ) {
             Text(
-                "Рецепты",
+                "Рецепты для вас",
                 color = textBlue,
                 fontFamily = cruinn_bold,
                 fontSize = 22.sp

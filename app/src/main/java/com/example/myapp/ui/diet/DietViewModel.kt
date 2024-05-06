@@ -31,7 +31,6 @@ class DietViewModel(
     )
 
     fun getDietProps(dietId: Int): Diet {
-        //TODO: null exception when choice by default (id = 1)
         return dietList.find { it.id == dietId }!!
     }
 }

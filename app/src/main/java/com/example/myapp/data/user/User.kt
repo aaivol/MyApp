@@ -16,5 +16,8 @@ data class User(
     val username: String,
     val password: String,
     val dietId: Int,
-    val filters: Int
+    val filters: Int,
+    val breakfast: Int,
+    val lunch: Int,
+    val dinner: Int
 )

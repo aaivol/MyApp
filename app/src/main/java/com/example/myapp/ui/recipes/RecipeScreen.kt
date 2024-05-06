@@ -107,8 +107,6 @@ fun RecipeBody(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        RecipeTop()
-
         Column(
             modifier = Modifier
                 .background(page)
