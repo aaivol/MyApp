@@ -132,7 +132,7 @@ fun RecipeBody(
         OutlinedButton(
             onClick = toHome,
             //connect to viewmodel with filters
-            border = BorderStroke(1.dp, borderBlue),
+            border = BorderStroke(2.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
                 containerColor = orange,
             ),
@@ -149,31 +149,5 @@ fun RecipeBody(
             )
         }
 
-    }
-}
-
-@Composable
-fun RecipeTop() {
-    Column(
-        modifier = Modifier
-            .fillMaxHeight(0.2f)
-            .background(login),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(
-            "РЕЦЕПТЫ",
-            fontSize = 35.sp,
-            fontFamily = cruinn_medium,
-            style = TextStyle(
-                brush = Brush.verticalGradient(
-                    colors = listOf(textBlue, login),
-                    tileMode = TileMode.Mirror
-                )
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 70.dp) //padding
-                .padding(horizontal = 50.dp) //padding
-        )
     }
 }

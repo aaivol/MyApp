@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -147,7 +148,7 @@ private fun UserProps(
 
         when {
             userDetails.username == null -> Loading()
-            else -> Column {
+            else -> Row {
                 userFilters.forEach{
                     Filters(name = it)
                 }
@@ -194,7 +195,7 @@ fun Filters(name: String){
         color = textBlue,
         modifier = Modifier
             .height(40.dp)
-            .padding(horizontal = 40.dp) //padding
+            .padding(10.dp) //padding
     )
 }
 

@@ -110,7 +110,7 @@ fun FoodBody(
         OutlinedButton(
             onClick = toHome,
             //connect to viewmodel with filters
-            border = BorderStroke(1.dp, borderBlue),
+            border = BorderStroke(2.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
                 containerColor = orange,
             ),

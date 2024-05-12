@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialogDefaults.shape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -64,6 +65,9 @@ fun ExpandableCard(
     )
 
     Card(
+        colors = CardDefaults.cardColors(
+            containerColor = orange,
+        ),
         modifier = Modifier
             .fillMaxWidth(0.95f)
             .padding(vertical = 10.dp)
@@ -84,14 +88,12 @@ fun ExpandableCard(
         when {
             // ...
             openAlertDialog.value -> {
-                DialogWithImage(
+                CategoryDialog(
                     onDismissRequest = { openAlertDialog.value = false },
                     onConfirmation = {
                         openAlertDialog.value = false
                         println("Confirmation registered") // Add logic here to handle confirmation.
-                        },
-                    painter = painterResource(id = R.drawable.carbonara),
-                    imageDescription = "Карбонара"
+                        }
                 )
             }
         }

@@ -13,9 +13,9 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 //myApp
-val borderBlue = Color(0x72135569)
-val textBlue = Color(0x72002947)
-val textAccent = Color(0x72057EA3)
+val borderBlue = Color(0x7206314E)
+val textBlue = Color(0x72001625)
+val textAccent = Color(0x72006786)
 
 //buttons
 val orange = Color(0xFFFCE4DD)
