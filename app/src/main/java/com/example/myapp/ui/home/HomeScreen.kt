@@ -102,6 +102,7 @@ fun HomeScreen(
                         //get properties from Room database
                         viewModel.getUser()
                         viewModel.checkCurrentFilters()
+                        //viewModel.startUserMeals()
                     }
                 },
                 userState,

@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
@@ -28,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,10 +56,15 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapp.DataStoring
 import com.example.myapp.R
+import com.example.myapp.data.statistics.Meal
 import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.components.ExpandableCard
 import com.example.myapp.ui.components.ExpandableCardPreview
+import com.example.myapp.ui.components.Loading
+import com.example.myapp.ui.components.RecipeCard
+import com.example.myapp.ui.home.Filters
+import com.example.myapp.ui.home.HomeText
 import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.navigation.NavigationDestination
 import com.example.myapp.ui.theme.borderBlue
@@ -64,6 +73,8 @@ import com.example.myapp.ui.theme.login
 import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.page
 import com.example.myapp.ui.theme.textBlue
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 object FoodDestination : NavigationDestination {
     override val route = "food"
@@ -92,20 +103,25 @@ fun FoodScreen(
     FoodBody(
         toHome = {
             navigateToHome()
-        }
+        },
+        homeViewModel
     )
 }
 
 @Composable
 fun FoodBody(
-    toHome: () -> Unit
+    toHome: () -> Unit,
+    homeViewModel: HomeViewModel
 ) {
     Column(
         modifier = Modifier
             .background(page)
             .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Diagram(
+            homeViewModel
+        )
         Cards()
         OutlinedButton(
             onClick = toHome,
@@ -118,7 +134,7 @@ fun FoodBody(
                 .padding(bottom = 40.dp) // margin
                 .fillMaxWidth(0.9f)
                 .height(100.dp)
-                .padding(10.dp) //padding
+                .padding(10.dp) //padding,
         ) {
             Text(
                 text = "Назад",
@@ -132,39 +148,73 @@ fun FoodBody(
 @Composable
 fun Cards(
 ){
-    ExpandableCard(
-        "Завтрак"
-    )
-    ExpandableCard(
-        "Обед"
-    )
-    ExpandableCard(
-        "Ужин"
-    )
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ){
+        ExpandableCard(
+            "Завтрак"
+        )
+        ExpandableCard(
+            "Обед"
+        )
+        ExpandableCard(
+            "Ужин"
+        )
+    }
 }
 
 @Composable
-fun Diagram(){
+fun Diagram(
+    homeViewModel: HomeViewModel
+){
+    val coroutineScope = rememberCoroutineScope()
+
     LazyColumn(
+    ) {
+        coroutineScope.launch {
+            homeViewModel.checkCurrentMeals()
+        }
+    }
+    Column(
         modifier = Modifier
             .padding(10.dp)
             .clip(shape = RoundedCornerShape(20.dp))
             .background(Color.Blue)
-            .fillMaxWidth(0.3f)
-            .height(100.dp)
+            .fillMaxWidth(0.7f)
+            .height(300.dp)
             .drawBehind {
                 drawRect(color = Color.Magenta)
             },
-        //contentPadding = innerPadding,
         verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
+    ){
+        Column {
+            homeViewModel.currentMeals.forEach { 
+                writeMeal(meal = it)
+            }
+        }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun FoodBodyPreview() {
-    FoodBody(
-        toHome = {}
-    )
+fun writeMeal(
+    meal: Meal
+){
+    Column(
+        modifier = Modifier
+            .padding(vertical = 20.dp)
+            .fillMaxWidth()
+            .padding(5.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = meal.mealType)
+        Row() {
+            Text(text = meal.dishId.toString() + " ")
+            Text(text = meal.soupId.toString() + " ")
+            Text(text = meal.saladId.toString() + " ")
+            Text(text = meal.snackId.toString() + " ")
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.example.myapp.data
 
+import com.example.myapp.data.relations.UserWithMeals
+import com.example.myapp.data.statistics.Meal
 import com.example.myapp.data.user.User
 import com.example.myapp.data.user.UserDao
 import kotlinx.coroutines.flow.Flow
@@ -10,6 +12,10 @@ class OfflineAppRepository(
         override fun getAllUsersStream(): Flow<List<User>> = userDao.getAllUsers()
 
         override fun getUserStream(username: String): Flow<User?> = userDao.getUser(username)
+
+        override suspend fun getMealsOfUserStream(username: String): List<UserWithMeals> = userDao.getMealsOfUser(username)
+
+        override suspend fun insertMeal(item: Meal) = userDao.insertMeal(item)
 
         override suspend fun insertUser(user: User) = userDao.insert(user)
 

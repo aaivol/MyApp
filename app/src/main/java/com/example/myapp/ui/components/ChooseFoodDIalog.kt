@@ -46,6 +46,7 @@ import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.login
 import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.page
+import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
 
 @Composable
@@ -77,46 +78,78 @@ fun ChooseFoodDialog(
                 Column(
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
-                        .weight(weight = 1f, fill = false),
+                        .weight(weight = 1f, fill = false)
+                        .padding(vertical = 20.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    //RECIPES 2
+                    //FILTER MEALS BY TYPE
                     val recipeViewModel: RecipeViewModel = viewModel(factory = AppViewModelProvider.Factory)
-                    var filteredDishes by remember { mutableStateOf(emptyList<Recipe>()) }
+                    var filteredMeals by remember { mutableStateOf(emptyList<Recipe>()) }
+                    filteredMeals = recipeViewModel.recipes.filter { it.type == chosenType }
 
-                    filteredDishes = recipeViewModel.recipes.filter { it.type == chosenType }
+                    //CLICK TO CHOOSE MEAL
+                    var selectedMeal by remember {
+                        mutableStateOf(filteredMeals.first())
+                    }
 
-                    repeat (filteredDishes.size / 2) { i ->
+                    filteredMeals.forEach { meal ->
+                        var borderColor = if (selectedMeal == meal) textAccent else Color.White
+
+                        RecipeCardForDialog(
+                            meal,
+                            onSelectionChange = {
+                                selectedMeal = meal
+                            },
+                            borderColor
+                        )
+                    }
+
+                    /*UI OUTPUT
+                    repeat (filteredMeals.size / 2) { i ->
+
+
                         Row(
-                            modifier = Modifier.fillMaxWidth() // maybe smth else here
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
                         ) {
-                            RecipeCardForDialog(filteredDishes[i * 2])
-                            RecipeCardForDialog(filteredDishes[i * 2 + 1])
+                            RecipeCardForDialog(filteredMeals[i * 2]) {
+                                onSelectionChange(filteredMeals[i * 2])
+                            }
+                            RecipeCardForDialog(filteredMeals[i * 2 + 1]) {
+                                onSelectionChange(filteredMeals[i * 2])
+                            }
                         }
                     }
 
-                    if (filteredDishes.size % 2 == 1) {
-                        RecipeCardForDialog(filteredDishes.last())
+
+                    if (filteredMeals.size % 2 == 1) {
+                        RecipeCardForDialog(filteredMeals.last()) {
+                            onSelectionChange(filteredMeals.last())
+                        }
                     }
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
+                     */
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    TextButton(
+                        onClick = { onDismissRequest() },
+                        modifier = Modifier.padding(15.dp),
                     ) {
-                        TextButton(
-                            onClick = { onDismissRequest() },
-                            modifier = Modifier.padding(15.dp),
-                        ) {
-                            Text("Назад")
-                        }
-                        TextButton(
-                            onClick = { onConfirmation() },
-                            modifier = Modifier.padding(15.dp),
-                        ) {
-                            Text("Далее")
-                        }
+                        Text("Назад")
+                    }
+                    TextButton(
+                        onClick = { onConfirmation() },
+                        modifier = Modifier.padding(15.dp),
+                    ) {
+                        Text("Далее")
                     }
                 }
             }

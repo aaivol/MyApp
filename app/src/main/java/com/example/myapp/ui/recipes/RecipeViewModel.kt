@@ -124,6 +124,19 @@ class RecipeViewModel(
             listOf("хлоп"),
             // Empty list means recipe [matches all filters]
             emptyList()
+        ),
+        Recipe(
+            8,
+            "Тест",
+            "Основное блюдо",
+            R.drawable.ic_launcher_background ,
+            "15 минут",
+            listOf("Рис", "Шампиньоны", "Томаты"),
+            55,
+            listOf(1, 2, 30),
+            listOf("хлоп"),
+            // Empty list means recipe [matches all filters]
+            emptyList()
         )
     )
 }

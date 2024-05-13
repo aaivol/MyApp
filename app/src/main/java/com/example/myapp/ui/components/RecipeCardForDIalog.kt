@@ -2,6 +2,8 @@ package com.example.myapp.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,6 +14,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,18 +28,30 @@ import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import com.example.myapp.data.food.Recipe
 import com.example.myapp.data.user_filter.FilterNames
+import com.example.myapp.ui.theme.login
+import com.example.myapp.ui.theme.orange
+import com.example.myapp.ui.theme.page
+import com.example.myapp.ui.theme.textAccent
 
 @Composable
 fun RecipeCardForDialog(
-    recipeItem: Recipe
+    recipeItem: Recipe,
+    onSelectionChange: () -> Unit,
+    borderColor: Color
 ) {
     Column(
         modifier = Modifier
         .padding(10.dp)
         .background(Color.White, RoundedCornerShape(10.dp))
-        .height(100.dp)
-        .width(100.dp)
-        .padding(5.dp),
+        .border(4.dp, borderColor,  RoundedCornerShape(10.dp))
+        .height(110.dp)
+        .width(110.dp)
+        .padding(10.dp)
+            .clickable (
+                onClick = {
+                    onSelectionChange()
+                }
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         val source = recipeItem.imageUrl
@@ -73,6 +91,8 @@ fun RecipeCardDialogPreview() {
                 FilterNames.PREGNANT.toString(),
                 FilterNames.LACTATION.toString()
             )
-        )
+        ),
+        onSelectionChange = {},
+        textAccent
     )
 }

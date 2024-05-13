@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapp.DataStoring
 import com.example.myapp.data.AppRepository
+import com.example.myapp.data.statistics.Meal
 import com.example.myapp.data.user.User
 import com.example.myapp.data.user_filter.FilterNames
 import com.example.myapp.data.user_filter.getBit
@@ -55,6 +56,9 @@ class HomeViewModel(
 
     private var _currentFilters: MutableState<List<String>> = mutableStateOf(emptyList())
     val currentFilters by _currentFilters
+
+    private var _currentMeals: MutableState<List<Meal>> = mutableStateOf(emptyList())
+    val currentMeals by _currentMeals
 
     /**
      * Updates an [User] in the Room database
@@ -113,6 +117,12 @@ class HomeViewModel(
 
         // push updates
         appRepository.updateFilters(_currentName.value, updatedFilter)
+    }
+
+    suspend fun checkCurrentMeals() {
+        appRepository.getMealsOfUserStream(_currentName.value).forEach {
+            _currentMeals.value = it.mealsOfUser
+        }
     }
 
 }

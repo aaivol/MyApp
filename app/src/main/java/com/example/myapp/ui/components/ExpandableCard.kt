@@ -92,7 +92,6 @@ fun ExpandableCard(
                     onDismissRequest = { openAlertDialog.value = false },
                     onConfirmation = {
                         openAlertDialog.value = false
-                        println("Confirmation registered") // Add logic here to handle confirmation.
                         }
                 )
             }

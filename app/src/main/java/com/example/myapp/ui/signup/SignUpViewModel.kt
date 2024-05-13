@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.text.NumberFormat
 import androidx.datastore.preferences.core.edit
+import com.example.myapp.data.statistics.Meal
 
 /**
  * ViewModel to validate and insert users in the Room database .
@@ -72,6 +73,7 @@ class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
     suspend fun saveUser() {
         if (validateInput()) {
             appRepository.insertUser(userUiState.userDetails.toUser())
+            setUserMeals()
         }
     }
 
@@ -92,6 +94,35 @@ class SignUpViewModel(private val appRepository: AppRepository) : ViewModel() {
         }
     }
 
+    suspend fun setUserMeals(){
+        val userMeals = listOf<Meal>(
+            Meal( mealType = "breakfast",
+                username = userUiState.userDetails.username,
+                dishId = 0,
+                soupId = 0,
+                saladId = 0,
+                snackId = 0
+            ),
+            Meal( mealType = "lunch",
+                username = userUiState.userDetails.username,
+                dishId = 0,
+                soupId = 0,
+                saladId = 0,
+                snackId = 0
+            ),
+            Meal( mealType = "dinner",
+                username = userUiState.userDetails.username,
+                dishId = 0,
+                soupId = 0,
+                saladId = 0,
+                snackId = 0
+            )
+        )
+
+        userMeals.forEach { appRepository.insertMeal(it) }
+
+    }
+
 }
 
 /**
@@ -107,10 +138,7 @@ data class UserDetails(
     val username: String = "",
     val password: String = "",
     var dietId: String = "",
-    var filters: String = "",
-    var breakfast: Int = 0,
-    var lunch: Int = 0,
-    var dinner: Int = 0
+    var filters: String = ""
 )
 
 fun UserDetails.toUser(): User = User(
@@ -118,10 +146,7 @@ fun UserDetails.toUser(): User = User(
     username = username,
     password = password,
     dietId = dietId.toIntOrNull() ?: 0,
-    filters = filters.toIntOrNull() ?: 0,
-    breakfast = breakfast,
-    lunch = lunch,
-    dinner = dinner
+    filters = filters.toIntOrNull() ?: 0
 )
 
 //fun User.formatedPassword(): String {
@@ -142,8 +167,5 @@ fun User.toUserDetails(): UserDetails = UserDetails(
     username = username,
     password = password,
     dietId = dietId.toString(),
-    filters = filters.toString(),
-    breakfast = breakfast,
-    lunch = lunch,
-    dinner = dinner
+    filters = filters.toString()
 )

@@ -4,12 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.myapp.data.relations.UserWithMeals
+import com.example.myapp.data.statistics.Meal
 import com.example.myapp.data.user.User
 import com.example.myapp.data.user.UserDao
 
 @Database(
     entities = [
-        User::class
+        User::class,
+        Meal::class
                ],
     version = 3,
     exportSchema = false)
