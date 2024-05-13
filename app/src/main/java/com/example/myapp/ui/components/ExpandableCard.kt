@@ -46,8 +46,11 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapp.R
+import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.food.FoodScreen
+import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.textBlue
@@ -58,6 +61,7 @@ fun ExpandableCard(
     title: String,
     titleFontWeight: FontWeight = FontWeight.Bold,
     padding: Dp = 12.dp,
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -92,7 +96,9 @@ fun ExpandableCard(
                     onDismissRequest = { openAlertDialog.value = false },
                     onConfirmation = {
                         openAlertDialog.value = false
-                        }
+                        },
+                    homeViewModel,
+                    title
                 )
             }
         }

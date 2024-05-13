@@ -119,10 +119,8 @@ fun FoodBody(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Diagram(
-            homeViewModel
-        )
-        Cards()
+        Diagram(homeViewModel)
+        Cards(homeViewModel)
         OutlinedButton(
             onClick = toHome,
             //connect to viewmodel with filters
@@ -147,6 +145,7 @@ fun FoodBody(
 
 @Composable
 fun Cards(
+    homeViewModel: HomeViewModel
 ){
     Column(
         modifier = Modifier
@@ -154,13 +153,16 @@ fun Cards(
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
         ExpandableCard(
-            "Завтрак"
+            "Завтрак",
+            homeViewModel = homeViewModel
         )
         ExpandableCard(
-            "Обед"
+            "Обед",
+            homeViewModel = homeViewModel
         )
         ExpandableCard(
-            "Ужин"
+            "Ужин",
+            homeViewModel = homeViewModel
         )
     }
 }

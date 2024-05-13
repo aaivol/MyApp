@@ -15,6 +15,14 @@ class OfflineAppRepository(
 
         override suspend fun getMealsOfUserStream(username: String): List<UserWithMeals> = userDao.getMealsOfUser(username)
 
+        override suspend fun setDish(username: String, mealType: String, dishId: Int) = userDao.setDish(username, mealType, dishId)
+
+        override suspend fun setSoup(username: String, mealType: String, soupId: Int) = userDao.setDish(username, mealType, soupId)
+
+        override suspend fun setSalad(username: String, mealType: String, saladId: Int) = userDao.setDish(username, mealType, saladId)
+
+        override suspend fun setSnack(username: String, mealType: String, snackId: Int) = userDao.setDish(username, mealType, snackId)
+
         override suspend fun insertMeal(item: Meal) = userDao.insertMeal(item)
 
         override suspend fun insertUser(user: User) = userDao.insert(user)

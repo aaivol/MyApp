@@ -3,6 +3,7 @@ package com.example.myapp.data
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import androidx.room.Update
 import com.example.myapp.data.relations.UserWithMeals
 import com.example.myapp.data.statistics.Meal
@@ -16,6 +17,14 @@ interface AppRepository {
     fun getUserStream(username: String): Flow<User?>
 
     suspend fun getMealsOfUserStream(username: String): List<UserWithMeals>
+
+    suspend fun setDish(username: String, mealType: String, dishId: Int)
+
+    suspend fun setSoup(username: String, mealType: String, soupId: Int)
+
+    suspend fun setSalad(username: String, mealType: String, saladId: Int)
+
+    suspend fun setSnack(username: String, mealType: String, snackId: Int)
 
     suspend fun insertMeal(item: Meal)
 

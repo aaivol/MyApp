@@ -49,7 +49,7 @@ class RecipeViewModel(
             listOf("Сметана", "Тыква", "Творог", "Зелень"),
             150,
             listOf(12, 8, 8),
-            listOf("хлоп"),
+            listOf("+"),
             // Empty list means recipe [matches all filters]
             listOf(
                 FilterNames.DIABETES.toString(),
@@ -70,7 +70,7 @@ class RecipeViewModel(
             listOf("Стейк семги", "Розмарин"),
             197,
             listOf(19, 14, 1),
-            listOf("хлоп"),
+            listOf("+"),
             // Empty list means recipe [matches all filters]
             listOf(
                 FilterNames.DIABETES.toString(),
@@ -109,7 +109,7 @@ class RecipeViewModel(
             listOf("Цветная капуста", "Репчатый лук", "Картофель", "Морковь"),
             31,
             listOf(1, 1, 4),
-            listOf("хлоп"),
+            listOf("+"),
             emptyList()
         ),
         Recipe(
@@ -121,7 +121,7 @@ class RecipeViewModel(
             listOf("Рис", "Шампиньоны", "Томаты"),
             55,
             listOf(1, 2, 30),
-            listOf("хлоп"),
+            listOf("+"),
             // Empty list means recipe [matches all filters]
             emptyList()
         ),
@@ -129,14 +129,43 @@ class RecipeViewModel(
             8,
             "Тест",
             "Основное блюдо",
-            R.drawable.ic_launcher_background ,
+            R.drawable.ic_launcher_background,
             "15 минут",
             listOf("Рис", "Шампиньоны", "Томаты"),
             55,
             listOf(1, 2, 30),
-            listOf("хлоп"),
+            listOf("+"),
             // Empty list means recipe [matches all filters]
             emptyList()
-        )
+        ),
+        Recipe(
+            9,
+            "Борщ",
+            "Суп",
+            R.drawable.ic_launcher_background,
+            "1 час",
+            listOf("Свекла", "Говядина", "Картофель", "Морковь"),
+            50,
+            listOf(1, 8, 2),
+            listOf("+"),
+            listOf(
+                FilterNames.DIABETES.toString(),
+                FilterNames.FAT.toString(),
+                FilterNames.PREGNANT.toString(),
+                FilterNames.LACTATION.toString()
+            )
+        ),
+        Recipe(
+            10,
+            "Цезарь с морепродуктами",
+            "Салат",
+            R.drawable.ic_launcher_background,
+            "1 час",
+            listOf("Яйцо", "Салат айсберг", "Креветки", "Кальмары"),
+            77,
+            listOf(6, 4, 3),
+            listOf("+"),
+            emptyList()
+        ),
     )
 }

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapp.DataStoring
 import com.example.myapp.data.AppRepository
+import com.example.myapp.data.food.Recipe
 import com.example.myapp.data.statistics.Meal
 import com.example.myapp.data.user.User
 import com.example.myapp.data.user_filter.FilterNames
@@ -125,6 +126,21 @@ class HomeViewModel(
         }
     }
 
+    suspend fun updateMeal(recipe: Recipe, mealType: String) {
+        if (recipe.type.equals("Основное блюдо") ){
+            appRepository.setDish(_currentName.value, mealType, recipe.id)
+        }
+        else if (recipe.type.equals("Суп") ){
+            appRepository.setSoup(_currentName.value, mealType, recipe.id)
+        }
+        else if (recipe.type.equals("Салат") ){
+            appRepository.setSalad(_currentName.value, mealType, recipe.id)
+        }
+        else if (recipe.type.equals("Перекус") ){
+            appRepository.setSnack(_currentName.value, mealType, recipe.id)
+        }
+        else return
+    }
 }
 
 /**

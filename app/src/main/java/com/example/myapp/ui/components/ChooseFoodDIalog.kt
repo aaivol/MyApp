@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +42,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapp.data.food.Recipe
 import com.example.myapp.ui.AppViewModelProvider
+import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.recipes.RecipeViewModel
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.login
@@ -48,12 +50,15 @@ import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.page
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
+import kotlinx.coroutines.launch
 
 @Composable
 fun ChooseFoodDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
-    chosenType: String
+    chosenType: String,
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    mealType: String
 ) {
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
@@ -67,13 +72,29 @@ fun ChooseFoodDialog(
             shape = RoundedCornerShape(16.dp),
         ) {
 
-
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                val coroutineScope = rememberCoroutineScope()
+
+                var currentMealType by remember {
+                    mutableStateOf("")
+                }
+
+                when (mealType) {
+                    "Завтрак" -> {
+                        currentMealType = "breakfast"
+                    }
+                    "Обед" -> {
+                        currentMealType = "lunch"
+                    }
+                    "Ужин" -> {
+                        currentMealType = "dinner"
+                    }
+                }
 
                 Column(
                     modifier = Modifier
@@ -100,38 +121,13 @@ fun ChooseFoodDialog(
                             meal,
                             onSelectionChange = {
                                 selectedMeal = meal
+                                coroutineScope.launch {
+                                    homeViewModel.updateMeal(selectedMeal, currentMealType)
+                                }
                             },
                             borderColor
                         )
                     }
-
-                    /*UI OUTPUT
-                    repeat (filteredMeals.size / 2) { i ->
-
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                        ) {
-                            RecipeCardForDialog(filteredMeals[i * 2]) {
-                                onSelectionChange(filteredMeals[i * 2])
-                            }
-                            RecipeCardForDialog(filteredMeals[i * 2 + 1]) {
-                                onSelectionChange(filteredMeals[i * 2])
-                            }
-                        }
-                    }
-
-
-                    if (filteredMeals.size % 2 == 1) {
-                        RecipeCardForDialog(filteredMeals.last()) {
-                            onSelectionChange(filteredMeals.last())
-                        }
-                    }
-
-                     */
                 }
 
                 Row(

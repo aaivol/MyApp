@@ -42,8 +42,17 @@ interface UserDao {
     suspend fun insertMeal(meal: Meal)
 
     @Query("UPDATE meal SET dishId = :dishId WHERE (username = :username AND mealType = :mealType) " )
-    suspend fun updateMeal(username: String, mealType: String, dishId: Int)
+    suspend fun setDish(username: String, mealType: String, dishId: Int)
     //update(test, breakfast, 5)
+
+    @Query("UPDATE meal SET soupId = :soupId WHERE (username = :username AND mealType = :mealType) " )
+    suspend fun setSoup(username: String, mealType: String, soupId: Int)
+
+    @Query("UPDATE meal SET saladId = :saladId WHERE (username = :username AND mealType = :mealType) " )
+    suspend fun setSalad(username: String, mealType: String, saladId: Int)
+
+    @Query("UPDATE meal SET snackId = :snackId WHERE (username = :username AND mealType = :mealType) " )
+    suspend fun setSnack(username: String, mealType: String, snackId: Int)
 
     @Transaction
     @Query("SELECT * FROM users WHERE username = :username")

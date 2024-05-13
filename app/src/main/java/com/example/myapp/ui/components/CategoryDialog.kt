@@ -35,6 +35,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myapp.ui.AppViewModelProvider
+import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.login
 import com.example.myapp.ui.theme.orange
@@ -45,6 +48,8 @@ import com.example.myapp.ui.theme.textBlue
 fun CategoryDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    mealType: String
 ) {
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
@@ -57,17 +62,17 @@ fun CategoryDialog(
                 .padding(12.dp),
             shape = RoundedCornerShape(16.dp),
         ) {
-            val categories = listOf(
+            val types = listOf(
                 "Основное блюдо",
                 "Суп",
                 "Салат",
                 "Перекус"
             )
-            var selectedCategory by remember {
-                mutableStateOf(categories.first())
+            var selectedType by remember {
+                mutableStateOf(types.first())
             }
-            val onSelectionChange = { category: String ->
-                selectedCategory = category
+            val onSelectionChange = { type: String ->
+                selectedType = type
             }
 
             val openChooseFoodDialog = remember { mutableStateOf(false) }
@@ -78,9 +83,10 @@ fun CategoryDialog(
                         onDismissRequest = { openChooseFoodDialog.value = false },
                         onConfirmation = {
                             openChooseFoodDialog.value = false
-                            println("Confirmation registered") // Add logic here to handle confirmation.
                         },
-                        selectedCategory
+                        selectedType,
+                        homeViewModel,
+                        mealType
                     )
                 }
             }
@@ -93,13 +99,13 @@ fun CategoryDialog(
             ) {
 
                 Column {
-                    categories.forEach { category ->
-                        val color = if (selectedCategory == category)
+                    types.forEach { type ->
+                        val color = if (selectedType == type)
                             orange else Color.White
 
                         OutlinedButton(
                             onClick = {
-                                onSelectionChange(category)
+                                onSelectionChange(type)
                             },
                             border = BorderStroke(1.dp, borderBlue),
                             colors = ButtonDefaults.buttonColors(
@@ -112,7 +118,7 @@ fun CategoryDialog(
                                 .padding(10.dp) //padding
                         ) {
                             Text(
-                                text = category,
+                                text = type,
                                 color = textBlue,
                                 fontSize = 16.sp
                             )
