@@ -87,6 +87,14 @@ fun FoodScreen(
     navigateToHome: () -> Unit,
     homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
+    LazyColumn(
+    ) {
+        coroutineScope.launch {
+            homeViewModel.checkCurrentMeals()
+        }
+    }
     //get current username from datastore
     val context = LocalContext.current
     val usernameStored = context.dataStore.data.collectAsState(
@@ -96,7 +104,6 @@ fun FoodScreen(
     //update username in viewmodel
     homeViewModel.updateName(usernameStored)
     val userState = homeViewModel.currentUser.value.userDetails
-    val coroutineScope = rememberCoroutineScope()
 
     //filters
     val userFilters = homeViewModel.currentFilters
@@ -119,6 +126,7 @@ fun FoodBody(
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Diagram(homeViewModel)
         Cards(homeViewModel)
         OutlinedButton(
@@ -171,14 +179,6 @@ fun Cards(
 fun Diagram(
     homeViewModel: HomeViewModel
 ){
-    val coroutineScope = rememberCoroutineScope()
-
-    LazyColumn(
-    ) {
-        coroutineScope.launch {
-            homeViewModel.checkCurrentMeals()
-        }
-    }
     Column(
         modifier = Modifier
             .padding(10.dp)

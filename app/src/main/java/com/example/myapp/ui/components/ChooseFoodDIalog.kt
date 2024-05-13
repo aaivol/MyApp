@@ -123,6 +123,7 @@ fun ChooseFoodDialog(
                                 selectedMeal = meal
                                 coroutineScope.launch {
                                     homeViewModel.updateMeal(selectedMeal, currentMealType)
+                                    homeViewModel.checkCurrentMeals()
                                 }
                             },
                             borderColor
