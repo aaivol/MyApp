@@ -1,5 +1,6 @@
 package com.example.myapp.ui.food
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Canvas
 import androidx.compose.foundation.BorderStroke
@@ -56,6 +57,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapp.DataStoring
 import com.example.myapp.R
+import com.example.myapp.data.food.Recipe
 import com.example.myapp.data.statistics.Meal
 import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
@@ -67,6 +69,7 @@ import com.example.myapp.ui.home.Filters
 import com.example.myapp.ui.home.HomeText
 import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.navigation.NavigationDestination
+import com.example.myapp.ui.recipes.RecipeViewModel
 import com.example.myapp.ui.theme.borderBlue
 import com.example.myapp.ui.theme.cruinn_medium
 import com.example.myapp.ui.theme.login
@@ -85,7 +88,8 @@ object FoodDestination : NavigationDestination {
 @Composable
 fun FoodScreen(
     navigateToHome: () -> Unit,
-    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    recipeViewModel: RecipeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -111,14 +115,16 @@ fun FoodScreen(
         toHome = {
             navigateToHome()
         },
-        homeViewModel
+        homeViewModel,
+        recipeViewModel
     )
 }
 
 @Composable
 fun FoodBody(
     toHome: () -> Unit,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    recipeViewModel: RecipeViewModel
 ) {
     Column(
         modifier = Modifier
@@ -127,7 +133,10 @@ fun FoodBody(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Diagram(homeViewModel)
+        Diagram(
+            homeViewModel,
+            recipeViewModel
+        )
         Cards(homeViewModel)
         OutlinedButton(
             onClick = toHome,
@@ -177,7 +186,8 @@ fun Cards(
 
 @Composable
 fun Diagram(
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    recipeViewModel: RecipeViewModel
 ){
     Column(
         modifier = Modifier
@@ -187,25 +197,30 @@ fun Diagram(
             .fillMaxWidth(0.7f)
             .height(300.dp)
             .drawBehind {
-                drawRect(color = Color.Magenta)
+                drawRect(color = Color.White)
             },
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.Center
     ){
         Column {
             homeViewModel.currentMeals.forEach { 
-                writeMeal(meal = it)
+                writeMeal(
+                    meal = it,
+                    recipeViewModel.recipes
+                )
             }
         }
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun writeMeal(
-    meal: Meal
+    meal: Meal,
+    recipes: List<Recipe>
 ){
     Column(
         modifier = Modifier
-            .padding(vertical = 20.dp)
+            .padding(vertical = 10.dp)
             .fillMaxWidth()
             .padding(5.dp),
         verticalArrangement = Arrangement.Center,
@@ -213,10 +228,55 @@ fun writeMeal(
     ) {
         Text(text = meal.mealType)
         Row() {
-            Text(text = meal.dishId.toString() + " ")
-            Text(text = meal.soupId.toString() + " ")
-            Text(text = meal.saladId.toString() + " ")
-            Text(text = meal.snackId.toString() + " ")
+            val caloriesNorma = 2000
+
+            val caloriesMeal = caloriesOfRecipe(meal.dishId, recipes) +
+                    caloriesOfRecipe(meal.soupId, recipes) +
+                    caloriesOfRecipe(meal.saladId, recipes) +
+                    caloriesOfRecipe(meal.snackId, recipes)
+
+            val pfcMeal = (0 until balanceOfRecipe(meal.dishId, recipes).size).map {
+                balanceOfRecipe(meal.dishId, recipes)[it] +
+                        balanceOfRecipe(meal.soupId, recipes)[it] +
+                        balanceOfRecipe(meal.saladId, recipes)[it] +
+                        balanceOfRecipe(meal.snackId, recipes)[it]
+            }
+
+            Text(
+                text = "MEAL CALORIES $caloriesMeal",
+                fontSize = 12.sp
+            )
+            Text(text = " MEAL PFC ", fontSize = 12.sp)
+            pfcMeal.forEach {
+                Text(text = "$it ", fontSize = 12.sp)
+            }
+
         }
     }
+}
+
+fun caloriesOfRecipe(id: Int, list: List<Recipe>): Int {
+    val recipe = list.find { it.id == id }
+    return recipe?.calories ?: 0
+}
+
+fun balanceOfRecipe(id: Int, list: List<Recipe>): List<Int> {
+    val recipe = list.find { it.id == id }
+    return recipe?.pfc ?: listOf<Int>(0, 0, 0)
+}
+
+fun calculateGCDForListOfNumbers(numbers: List<Int>): Int {
+    require(numbers.isNotEmpty()) { "List must not be empty" }
+    var result = numbers[0]
+    for (i in 1 until numbers.size) {
+        var num1 = result
+        var num2 = numbers[i]
+        while (num2 != 0) {
+            val temp = num2
+            num2 = num1 % num2
+            num1 = temp
+        }
+        result = num1
+    }
+    return result
 }
