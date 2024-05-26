@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapp.R
+import com.example.myapp.data.food.Recipe
 import com.example.myapp.data.statistics.Meal
 import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.food.FoodScreen
@@ -68,7 +69,8 @@ fun ExpandableCard(
     title: String,
     titleFontWeight: FontWeight = FontWeight.Bold,
     padding: Dp = 12.dp,
-    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    recipes: List<Recipe>
 ) {
     var expandedState by remember { mutableStateOf(false) }
     val rotationState by animateFloatAsState(
@@ -162,7 +164,9 @@ fun ExpandableCard(
                 ) {
                     if (mealToShow.dishId != 0){
                         Image(
-                            painter = painterResource(id = R.drawable.graten),
+                            painter = painterResource(
+                                id = pictureOfRecipe(mealToShow.dishId, recipes
+                                )),
                             contentDescription = "",
                             modifier = Modifier
                                 .padding(0.dp) // margin
@@ -173,7 +177,9 @@ fun ExpandableCard(
                     }
                     if (mealToShow.soupId != 0){
                         Image(
-                            painter = painterResource(id = R.drawable.soup_capusta),
+                            painter = painterResource(
+                                id = pictureOfRecipe(mealToShow.soupId, recipes
+                                )),
                             contentDescription = "",
                             modifier = Modifier
                                 .padding(0.dp) // margin
@@ -184,7 +190,9 @@ fun ExpandableCard(
                     }
                     if (mealToShow.saladId != 0){
                         Image(
-                            painter = painterResource(id = R.drawable.salad),
+                            painter = painterResource(
+                                id = pictureOfRecipe(mealToShow.saladId, recipes
+                                )),
                             contentDescription = "",
                             modifier = Modifier
                                 .padding(0.dp) // margin
@@ -195,7 +203,9 @@ fun ExpandableCard(
                     }
                     if (mealToShow.snackId != 0){
                         Image(
-                            painter = painterResource(id = R.drawable.rice),
+                            painter = painterResource(
+                                id = pictureOfRecipe(mealToShow.snackId, recipes
+                                )),
                             contentDescription = "",
                             modifier = Modifier
                                 .padding(0.dp) // margin
@@ -232,10 +242,15 @@ fun ExpandableCard(
     }
 }
 
+fun pictureOfRecipe(id: Int, list: List<Recipe>): Int {
+    val recipe = list.find { it.id == id }
+    return recipe?.imageUrl ?: 0
+}
+
 @Composable
 @Preview
 fun ExpandableCardPreview() {
     ExpandableCard(
-        title = "My Title"
+        title = "My Title", recipes = emptyList()
     )
 }

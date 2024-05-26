@@ -22,9 +22,9 @@ class RecipeViewModel(
             listOf(11, 15, 27),
             listOf("мяу", "миу"),
             listOf(
-                FilterNames.ALLERGY.toString(),
-                FilterNames.PREGNANT.toString(),
-                FilterNames.LACTATION.toString()
+                FilterNames.ALLERGY.filterName,
+                FilterNames.PREGNANT.filterName,
+                FilterNames.LACTATION.filterName
             )
         ),
         Recipe(
@@ -52,13 +52,13 @@ class RecipeViewModel(
             listOf("+"),
             // Empty list means recipe [matches all filters]
             listOf(
-                FilterNames.DIABETES.toString(),
-                FilterNames.ALLERGY.toString(),
-                FilterNames.FAT.toString(),
-                FilterNames.GASTRITIS.toString(),
-                FilterNames.NO_MEAT.toString(),
-                FilterNames.PREGNANT.toString(),
-                FilterNames.LACTATION.toString()
+                FilterNames.DIABETES.filterName,
+                FilterNames.ALLERGY.filterName,
+                FilterNames.FAT.filterName,
+                FilterNames.GASTRITIS.filterName,
+                FilterNames.NO_MEAT.filterName,
+                FilterNames.PREGNANT.filterName,
+                FilterNames.LACTATION.filterName
             )
         ),
         Recipe(
@@ -73,12 +73,12 @@ class RecipeViewModel(
             listOf("+"),
             // Empty list means recipe [matches all filters]
             listOf(
-                FilterNames.DIABETES.toString(),
-                FilterNames.FAT.toString(),
-                FilterNames.GASTRITIS.toString(),
-                FilterNames.NO_MEAT.toString(),
-                FilterNames.PREGNANT.toString(),
-                FilterNames.LACTATION.toString()
+                FilterNames.DIABETES.filterName,
+                FilterNames.FAT.filterName,
+                FilterNames.GASTRITIS.filterName,
+                FilterNames.NO_MEAT.filterName,
+                FilterNames.PREGNANT.filterName,
+                FilterNames.LACTATION.filterName
             )
         ),
         Recipe(
@@ -93,11 +93,11 @@ class RecipeViewModel(
             listOf("расрас и готово"),
             // Empty list means recipe [matches all filters]
             listOf(
-                FilterNames.ALLERGY.toString(),
-                FilterNames.GASTRITIS.toString(),
-                FilterNames.NO_MEAT.toString(),
-                FilterNames.PREGNANT.toString(),
-                FilterNames.LACTATION.toString()
+                FilterNames.ALLERGY.filterName,
+                FilterNames.GASTRITIS.filterName,
+                FilterNames.NO_MEAT.filterName,
+                FilterNames.PREGNANT.filterName,
+                FilterNames.LACTATION.filterName
             )
         ),
         Recipe(
@@ -127,45 +127,66 @@ class RecipeViewModel(
         ),
         Recipe(
             8,
-            "Тест",
-            "Основное блюдо",
-            R.drawable.ic_launcher_background,
-            "15 минут",
-            listOf("Рис", "Шампиньоны", "Томаты"),
-            55,
-            listOf(1, 2, 30),
+            "Молочный коктейль",
+            "Напиток",
+            R.drawable.choco_coctail,
+            "1 час 15 минут",
+            listOf("Молоко", "Шоколад", "Сахар"),
+            300,
+            listOf(7, 27, 32),
             listOf("+"),
-            // Empty list means recipe [matches all filters]
-            emptyList()
+            listOf(
+                FilterNames.NO_MEAT.filterName,
+                FilterNames.PREGNANT.filterName,
+                FilterNames.LACTATION.filterName
+            )
         ),
         Recipe(
             9,
             "Борщ",
             "Суп",
-            R.drawable.ic_launcher_background,
+            R.drawable.bors,
             "1 час",
             listOf("Свекла", "Говядина", "Картофель", "Морковь"),
             50,
             listOf(1, 8, 2),
             listOf("+"),
             listOf(
-                FilterNames.DIABETES.toString(),
-                FilterNames.FAT.toString(),
-                FilterNames.PREGNANT.toString(),
-                FilterNames.LACTATION.toString()
+                FilterNames.DIABETES.filterName,
+                FilterNames.PREGNANT.filterName,
+                FilterNames.LACTATION.filterName
             )
         ),
         Recipe(
             10,
-            "Цезарь с морепродуктами",
+            "Салат с лососем",
             "Салат",
-            R.drawable.ic_launcher_background,
+            R.drawable.salad_with_losos,
             "1 час",
-            listOf("Яйцо", "Салат айсберг", "Креветки", "Кальмары"),
-            77,
+            listOf("Томаты", "Лосось", "Айсберг", "Пармезан"),
+            90,
             listOf(6, 4, 3),
             listOf("+"),
-            emptyList()
+            listOf(
+                FilterNames.NO_MEAT.filterName,
+                FilterNames.PREGNANT.filterName,
+                FilterNames.LACTATION.filterName
+            )
+        ),
+        Recipe(
+            11,
+            "Мохито",
+            "Напиток",
+            R.drawable.mojito,
+            "20 минут",
+            listOf("Лайм", "Текила", "Спрайт"),
+            80,
+            listOf(0, 0, 50),
+            listOf("+"),
+            listOf(
+                FilterNames.NO_MEAT.filterName,
+                FilterNames.NO_MILK.filterName
+            )
         ),
     )
 }

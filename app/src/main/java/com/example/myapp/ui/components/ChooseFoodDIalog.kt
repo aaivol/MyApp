@@ -96,6 +96,15 @@ fun ChooseFoodDialog(
                     }
                 }
 
+                val recipeViewModel: RecipeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+                var filteredMeals by remember { mutableStateOf(emptyList<Recipe>()) }
+                filteredMeals = recipeViewModel.recipes.filter { it.type == chosenType }
+
+                //CLICK TO CHOOSE MEAL
+                var selectedMeal by remember {
+                    mutableStateOf(filteredMeals.first())
+                }
+
                 Column(
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
@@ -105,14 +114,7 @@ fun ChooseFoodDialog(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     //FILTER MEALS BY TYPE
-                    val recipeViewModel: RecipeViewModel = viewModel(factory = AppViewModelProvider.Factory)
-                    var filteredMeals by remember { mutableStateOf(emptyList<Recipe>()) }
-                    filteredMeals = recipeViewModel.recipes.filter { it.type == chosenType }
 
-                    //CLICK TO CHOOSE MEAL
-                    var selectedMeal by remember {
-                        mutableStateOf(filteredMeals.first())
-                    }
 
                     filteredMeals.forEach { meal ->
                         var borderColor = if (selectedMeal == meal) textAccent else Color.White
@@ -121,10 +123,6 @@ fun ChooseFoodDialog(
                             meal,
                             onSelectionChange = {
                                 selectedMeal = meal
-                                coroutineScope.launch {
-                                    homeViewModel.updateMeal(selectedMeal, currentMealType)
-                                    homeViewModel.checkCurrentMeals()
-                                }
                             },
                             borderColor
                         )
@@ -143,7 +141,12 @@ fun ChooseFoodDialog(
                         Text("Назад")
                     }
                     TextButton(
-                        onClick = { onConfirmation() },
+                        onClick = {
+                            coroutineScope.launch {
+                                homeViewModel.updateMeal(selectedMeal, currentMealType)
+                                homeViewModel.checkCurrentMeals()
+                            }
+                            onConfirmation() },
                         modifier = Modifier.padding(15.dp),
                     ) {
                         Text("Далее")

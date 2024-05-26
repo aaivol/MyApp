@@ -65,6 +65,7 @@ import com.example.myapp.ui.components.ExpandableCard
 import com.example.myapp.ui.components.ExpandableCardPreview
 import com.example.myapp.ui.components.Loading
 import com.example.myapp.ui.components.RecipeCard
+import com.example.myapp.ui.components.showProgress
 import com.example.myapp.ui.home.Filters
 import com.example.myapp.ui.home.HomeText
 import com.example.myapp.ui.home.HomeViewModel
@@ -137,7 +138,9 @@ fun FoodBody(
             homeViewModel,
             recipeViewModel
         )
-        Cards(homeViewModel)
+        Cards(
+            homeViewModel,
+            recipeViewModel)
         OutlinedButton(
             onClick = toHome,
             //connect to viewmodel with filters
@@ -162,7 +165,8 @@ fun FoodBody(
 
 @Composable
 fun Cards(
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    recipeViewModel: RecipeViewModel
 ){
     Column(
         modifier = Modifier
@@ -171,15 +175,18 @@ fun Cards(
     ){
         ExpandableCard(
             "Завтрак",
-            homeViewModel = homeViewModel
+            homeViewModel = homeViewModel,
+            recipes = recipeViewModel.recipes
         )
         ExpandableCard(
             "Обед",
-            homeViewModel = homeViewModel
+            homeViewModel = homeViewModel,
+            recipes = recipeViewModel.recipes
         )
         ExpandableCard(
             "Ужин",
-            homeViewModel = homeViewModel
+            homeViewModel = homeViewModel,
+            recipes = recipeViewModel.recipes
         )
     }
 }
@@ -194,8 +201,8 @@ fun Diagram(
             .padding(10.dp)
             .clip(shape = RoundedCornerShape(20.dp))
             .background(Color.Blue)
-            .fillMaxWidth(0.7f)
-            .height(300.dp)
+            .fillMaxWidth(0.84f)
+            .height(320.dp)
             .drawBehind {
                 drawRect(color = Color.White)
             },
@@ -220,14 +227,14 @@ fun writeMeal(
 ){
     Column(
         modifier = Modifier
-            .padding(vertical = 10.dp)
+            .padding(vertical = 5.dp)
             .fillMaxWidth()
-            .padding(5.dp),
+            .padding(4.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = meal.mealType)
-        Row() {
+        Column {
             val caloriesNorma = 2000
 
             val caloriesMeal = caloriesOfRecipe(meal.dishId, recipes) +
@@ -242,13 +249,13 @@ fun writeMeal(
                         balanceOfRecipe(meal.snackId, recipes)[it]
             }
 
-            Text(
-                text = "MEAL CALORIES $caloriesMeal",
-                fontSize = 12.sp
-            )
-            Text(text = " MEAL PFC ", fontSize = 12.sp)
-            pfcMeal.forEach {
-                Text(text = "$it ", fontSize = 12.sp)
+            showProgress(caloriesMeal)
+
+            Row {
+                Text(text = " MEAL PFC ", fontSize = 12.sp)
+                pfcMeal.forEach {
+                    Text(text = "$it ", fontSize = 12.sp)
+                }
             }
 
         }
@@ -264,6 +271,8 @@ fun balanceOfRecipe(id: Int, list: List<Recipe>): List<Int> {
     val recipe = list.find { it.id == id }
     return recipe?.pfc ?: listOf<Int>(0, 0, 0)
 }
+
+
 
 fun calculateGCDForListOfNumbers(numbers: List<Int>): Int {
     require(numbers.isNotEmpty()) { "List must not be empty" }
