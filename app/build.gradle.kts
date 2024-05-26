@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
     ksp("androidx.room:room-compiler:2.5.0")
 
     // ROOM
