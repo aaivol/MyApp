@@ -134,7 +134,7 @@ class RecipeViewModel(
             R.drawable.water,
             "0 минут",
             listOf("Вода"),
-            80,
+            0,
             listOf(0, 0, 50),
             listOf("+"),
             listOf(
@@ -199,7 +199,7 @@ class RecipeViewModel(
             R.drawable.coffee,
             "10 минут",
             listOf("Зерна кофе", "Молоко"),
-            200,
+            190,
             listOf(13, 14, 1),
             listOf("+"),
             listOf(
@@ -216,7 +216,7 @@ class RecipeViewModel(
             R.drawable.choco_coctail,
             "1 час 15 минут",
             listOf("Молоко", "Шоколад", "Сахар"),
-            300,
+            270,
             listOf(7, 27, 32),
             listOf("+"),
             listOf(

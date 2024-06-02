@@ -37,7 +37,7 @@ import com.example.myapp.ui.theme.textBlue
 @Composable
 fun WaterCard(
     recipeItem: Recipe,
-    onSelectionChange: () -> Unit
+    onUpdate: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -46,9 +46,9 @@ fun WaterCard(
             .height(180.dp)
             .width(140.dp)
             .padding(10.dp)
-            .clickable (
+            .clickable(
                 onClick = {
-                    onSelectionChange()
+                    onUpdate()
                 }
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,6 +94,6 @@ fun WaterCardPreview() {
                 FilterNames.LACTATION.filterName
             )
         ),
-        onSelectionChange = {}
+        onUpdate = { }
     )
 }

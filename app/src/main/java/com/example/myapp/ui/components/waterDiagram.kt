@@ -35,7 +35,9 @@ import com.example.myapp.ui.theme.textBlue
 @SuppressLint("UnrememberedMutableState")
 @Preview
 @Composable
-fun waterDiagram(ml : Int = 500){
+fun waterDiagram(
+    ml : Int = 500,
+){
 
     val gradient = Brush.linearGradient(listOf(
         orange,

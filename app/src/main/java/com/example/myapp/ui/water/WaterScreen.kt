@@ -23,6 +23,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -146,11 +147,17 @@ private fun UserProps(
 
     }
 }
+
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun WaterBody(
     BackClick: () -> Unit,
     recipeVM: RecipeViewModel
 ) {
+    var updateDiagram by remember {  mutableStateOf(false) }
+    var drinked by remember {  mutableStateOf(0) }
+    var calories by remember {  mutableStateOf(0) }
+
     Column (
         modifier = Modifier
             .fillMaxWidth(),
@@ -168,7 +175,16 @@ fun WaterBody(
                 .padding(horizontal = 40.dp) //padding
         )
 
-        waterDiagram()
+        if (updateDiagram){
+            if (drinked < 2000){
+                drinked += 200
+            }
+            waterDiagram(drinked)
+            updateDiagram = false
+        }
+        else {
+            waterDiagram(drinked)
+        }
 
         Row(
             modifier = Modifier
@@ -193,7 +209,7 @@ fun WaterBody(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "00",
+                    text = calories.toString(),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     color = textBlue,
@@ -205,17 +221,30 @@ fun WaterBody(
             modifier = Modifier
                 .padding(vertical = 20.dp)
         ) {
+
             Row {
                 recipeVM.recipes.forEach { it
                     if (it.type == "Напиток" && it.id < 12 ){
-                        WaterCard(recipeItem = it){}
+                        WaterCard(
+                            it,
+                            onUpdate = {
+                                updateDiagram = true
+                                calories += it.calories
+                            }
+                        )
                     }
                 }
             }
             Row {
                 recipeVM.recipes.forEach { it
                     if (it.type == "Напиток" && it.id > 11 ){
-                        WaterCard(recipeItem = it){}
+                        WaterCard(
+                            it,
+                            onUpdate = {
+                                updateDiagram = true
+                                calories += it.calories
+                            }
+                        )
                     }
                 }
             }
