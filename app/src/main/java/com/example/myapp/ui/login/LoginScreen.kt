@@ -37,7 +37,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -204,6 +208,8 @@ fun InputField(
     userDetails: UserDetails,
     onValueChange: (UserDetails) -> Unit = {}
 ) {
+    val textFieldContent = stringResource(id = R.string.test_field)
+
     TextField(
         value = userDetails.username,
         onValueChange = { onValueChange(userDetails.copy(username = it)) },
@@ -233,6 +239,7 @@ fun InputField(
             .height(110.dp)
             .padding(20.dp) //padding
             .border(2.dp, borderBlue, RoundedCornerShape(60.dp))
+            .semantics { contentDescription = textFieldContent }
     )
 
     TextField(

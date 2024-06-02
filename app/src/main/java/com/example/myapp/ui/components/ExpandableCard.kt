@@ -224,9 +224,9 @@ fun ExpandableCard(
                             ),
                             modifier = Modifier
                                 .padding(0.dp) // margin
-                                .width(120.dp)
-                                .height(140.dp)
-                                .padding(10.dp) //padding
+                                .width(80.dp)
+                                .height(80.dp)
+                                .padding(5.dp) //padding
                         ) {
                             Text(
                                 text = "+",

@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.graphics.Canvas
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -202,7 +204,7 @@ fun Diagram(
             .clip(shape = RoundedCornerShape(20.dp))
             .background(Color.Blue)
             .fillMaxWidth(0.84f)
-            .height(320.dp)
+            .height(340.dp)
             .drawBehind {
                 drawRect(color = Color.White)
             },
@@ -248,13 +250,28 @@ fun writeMeal(
                         balanceOfRecipe(meal.saladId, recipes)[it] +
                         balanceOfRecipe(meal.snackId, recipes)[it]
             }
-
             showProgress(caloriesMeal)
 
             Row {
-                Text(text = " MEAL PFC ", fontSize = 12.sp)
+                Text(text = " { Б Ж У } ", fontSize = 16.sp)
                 pfcMeal.forEach {
-                    Text(text = "$it ", fontSize = 12.sp)
+                    Row(
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .height(26.dp)
+                            .width(34.dp)
+                            .padding(2.dp)
+                            .border(2.dp, textBlue, RoundedCornerShape(10.dp)),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "$it ",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = textBlue,
+                        )
+                    }
                 }
             }
 
@@ -274,7 +291,7 @@ fun balanceOfRecipe(id: Int, list: List<Recipe>): List<Int> {
 
 
 
-fun calculateGCDForListOfNumbers(numbers: List<Int>): Int {
+fun calculateGCDForList(numbers: List<Int>): Int {
     require(numbers.isNotEmpty()) { "List must not be empty" }
     var result = numbers[0]
     for (i in 1 until numbers.size) {

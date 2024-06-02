@@ -77,6 +77,7 @@ class RecipeViewModel(
                 FilterNames.FAT.filterName,
                 FilterNames.GASTRITIS.filterName,
                 FilterNames.NO_MEAT.filterName,
+                FilterNames.NO_MILK.filterName,
                 FilterNames.PREGNANT.filterName,
                 FilterNames.LACTATION.filterName
             )
@@ -152,7 +153,9 @@ class RecipeViewModel(
             listOf(1, 8, 2),
             listOf("+"),
             listOf(
+                FilterNames.ALLERGY.filterName,
                 FilterNames.DIABETES.filterName,
+                FilterNames.NO_MILK.filterName,
                 FilterNames.PREGNANT.filterName,
                 FilterNames.LACTATION.filterName
             )
@@ -169,6 +172,7 @@ class RecipeViewModel(
             listOf("+"),
             listOf(
                 FilterNames.NO_MEAT.filterName,
+                FilterNames.NO_MILK.filterName,
                 FilterNames.PREGNANT.filterName,
                 FilterNames.LACTATION.filterName
             )
