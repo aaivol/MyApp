@@ -20,6 +20,8 @@ import com.example.myapp.ui.settings.SettingsDestination
 import com.example.myapp.ui.settings.SettingsScreen
 import com.example.myapp.ui.signup.SignUpDestination
 import com.example.myapp.ui.signup.SignUpScreen
+import com.example.myapp.ui.water.WaterDestination
+import com.example.myapp.ui.water.WaterScreen
 
 /**
  * Provides Navigation graph for the application.
@@ -58,6 +60,7 @@ fun MyAppNavHost(
             HomeScreen(
                 navigateToSettings = { navController.navigate(SettingsDestination.route) },
                 navigateToFood = { navController.navigate(FoodDestination.route) },
+                navigateToWater = { navController.navigate(WaterDestination.route) },
                 navigateToRecipes = { navController.navigate(RecipeDestination.route) }
             )
         }
@@ -68,6 +71,11 @@ fun MyAppNavHost(
         }
         composable(route = FoodDestination.route) {
             FoodScreen(
+                navigateToHome = { navController.navigate(HomeDestination.route) }
+            )
+        }
+        composable(route = WaterDestination.route) {
+            WaterScreen(
                 navigateToHome = { navController.navigate(HomeDestination.route) }
             )
         }

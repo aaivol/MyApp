@@ -1,15 +1,20 @@
-package com.example.myapp.ui.home
+package com.example.myapp.ui.water
+
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -31,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapp.DataStoring
@@ -40,10 +46,14 @@ import com.example.myapp.data.user_filter.FilterNames
 import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
 import com.example.myapp.ui.components.Loading
+import com.example.myapp.ui.components.WaterCard
+import com.example.myapp.ui.components.waterDiagram
 import com.example.myapp.ui.diet.DietGoalBody
 import com.example.myapp.ui.diet.DietViewModel
+import com.example.myapp.ui.home.HomeViewModel
 import com.example.myapp.ui.login.LoginBody
 import com.example.myapp.ui.navigation.NavigationDestination
+import com.example.myapp.ui.recipes.RecipeViewModel
 import com.example.myapp.ui.signup.SignUpDestination
 import com.example.myapp.ui.signup.UserDetails
 import com.example.myapp.ui.signup.UserUiState
@@ -58,21 +68,18 @@ import com.example.myapp.ui.theme.textBlue
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-object HomeDestination : NavigationDestination {
-    override val route = "home"
+object WaterDestination : NavigationDestination {
+    override val route = "water"
     override val titleRes = R.string.app_name
 }
 
-//HOME SCREEN
+//WATER SCREEN
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun HomeScreen(
-    navigateToSettings: () -> Unit,
-    navigateToFood: () -> Unit,
-    navigateToWater: () -> Unit,
-    navigateToRecipes: () -> Unit,
+fun WaterScreen(
+    navigateToHome: () -> Unit,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    dietViewModel: DietViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    recipeViewModel: RecipeViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     //get current username from datastore
     val context = LocalContext.current
@@ -94,7 +101,6 @@ fun HomeScreen(
             .background(page),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        HomeText(usernameStored)
         Column (
         ) {
             UserProps(
@@ -103,27 +109,18 @@ fun HomeScreen(
                         //get properties from Room database
                         viewModel.getUser()
                         viewModel.checkCurrentFilters()
-                        //viewModel.startUserMeals()
                     }
                 },
                 userState,
-                dietViewModel,
+                recipeViewModel,
                 userFilters
             )
         }
-        HomeMenu(
-            toFoodClick = {
-                navigateToFood()
+        WaterBody(
+            BackClick = {
+                navigateToHome()
             },
-            toWaterCLick = {
-                navigateToWater()
-            },
-            toSettingsClick = {
-                navigateToSettings()
-            },
-            toRecipesClick = {
-                navigateToRecipes()
-            }
+            recipeViewModel
         )
     }
 }
@@ -132,7 +129,7 @@ fun HomeScreen(
 private fun UserProps(
     update: () -> Unit,
     userDetails: UserDetails,
-    dietVM: DietViewModel,
+    recipeVM: RecipeViewModel,
     userFilters: List<String>
 ) {
     update()
@@ -145,142 +142,90 @@ private fun UserProps(
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (userDetails.dietId.isNotBlank()) {
-                val diet = dietVM.getDietProps(userDetails.dietId.toInt())
-                DietText(diet)
-            }
-        }
-
-        when {
-            userDetails.username == null -> Loading()
-            else -> Row {
-                userFilters.forEach{
-                    Filters(name = it)
-                }
-
-            }
         }
 
     }
 }
-
 @Composable
-fun DietText(currentDiet: Diet) {
-    Text(
-        text = currentDiet.quote,
-        fontSize = 18.sp,
-        color = textBlue,
-        modifier = Modifier
-            .padding(top = 0.dp) //margin
-            .fillMaxWidth()
-            .background(page)
-            .height(80.dp)
-            .padding(horizontal = 40.dp) //padding
-    )
-}
-
-
-@Composable
-fun HomeText(username: String) {
-    Text("Приветствую, $username !",
-        fontSize = 24.sp,
-        color = textBlue,
-        modifier = Modifier
-            .padding(top = 40.dp) //margin
-            .fillMaxWidth()
-            .height(50.dp)
-            .padding(horizontal = 40.dp) //padding
-    )
-}
-
-@Composable
-fun Filters(name: String){
-    Text(" $name ",
-        fontSize = 14.sp,
-        color = textBlue,
-        modifier = Modifier
-            .height(40.dp)
-            .padding(10.dp) //padding
-    )
-}
-
-@Composable
-fun HomeMenu(
-    toFoodClick: () -> Unit,
-    toWaterCLick: () -> Unit,
-    toSettingsClick: () -> Unit,
-    toRecipesClick: () -> Unit
+fun WaterBody(
+    BackClick: () -> Unit,
+    recipeVM: RecipeViewModel
 ) {
     Column (
         modifier = Modifier
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
+
+        Text("Дневная норма (ml)",
+            fontSize = 24.sp,
+            color = textBlue,
+            modifier = Modifier
+                .padding(top = 40.dp) //margin
+                .fillMaxWidth()
+                .height(50.dp)
+                .padding(horizontal = 40.dp) //padding
+        )
+
+        waterDiagram()
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text("Калории",
+                fontSize = 24.sp,
+                color = textBlue,
+                modifier = Modifier
+                    .padding(top = 40.dp) //margin
+                    .height(50.dp)
+                    .padding(horizontal = 40.dp) //padding
+            )
+            Row(
+                modifier = Modifier
+                    .padding(top = 40.dp)
+                    .height(36.dp)
+                    .width(54.dp)
+                    .padding(2.dp)
+                    .border(2.dp, textBlue, RoundedCornerShape(10.dp)),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "00",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = textBlue,
+                )
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .padding(vertical = 20.dp)
+        ) {
+            Row {
+                recipeVM.recipes.forEach { it
+                    if (it.type == "Напиток" && it.id < 12 ){
+                        WaterCard(recipeItem = it){}
+                    }
+                }
+            }
+            Row {
+                recipeVM.recipes.forEach { it
+                    if (it.type == "Напиток" && it.id > 11 ){
+                        WaterCard(recipeItem = it){}
+                    }
+                }
+            }
+        }
+
         OutlinedButton(
-            onClick = toFoodClick,
+            onClick = BackClick,
             border = BorderStroke(2.dp, borderBlue),
             colors = ButtonDefaults.buttonColors(
                 containerColor = orange,
-            ),
-            modifier = Modifier
-                .padding(top = 10.dp) // margin
-                .fillMaxWidth(0.85f)
-                .height(140.dp)
-                .padding(16.dp) //margin
-        ) {
-            Text(
-                "Питание",
-                color = textBlue,
-                fontFamily = cruinn_bold,
-                fontSize = 22.sp
-            )
-        }
-
-        OutlinedButton(
-            onClick = toWaterCLick,
-            border = BorderStroke(2.dp, borderBlue),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = login,
-            ),
-            modifier = Modifier
-                .padding(top = 0.dp) // margin
-                .fillMaxWidth(0.85f)
-                .height(140.dp)
-                .padding(16.dp) //margin
-        ) {
-            Text(
-                "Вода",
-                color = textBlue,
-                fontFamily = cruinn_bold,
-                fontSize = 22.sp
-            )
-        }
-
-        OutlinedButton(
-            onClick = toRecipesClick,
-            border = BorderStroke(2.dp, borderBlue),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = orange,
-            ),
-            modifier = Modifier
-                .padding(top = 0.dp) // margin
-                .fillMaxWidth(0.85f)
-                .height(110.dp)
-                .padding(16.dp) //margin
-        ) {
-            Text(
-                "Рецепты для вас",
-                color = textBlue,
-                fontFamily = cruinn_bold,
-                fontSize = 22.sp
-            )
-        }
-
-        OutlinedButton(
-            onClick = toSettingsClick,
-            border = BorderStroke(2.dp, borderBlue),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = page,
             ),
             modifier = Modifier
                 .padding(top = 0.dp) // margin
@@ -289,7 +234,7 @@ fun HomeMenu(
                 .padding(16.dp) //margin
         ) {
             Text(
-                "Настройки",
+                "Назад",
                 color = textBlue,
                 fontFamily = cruinn_bold,
                 fontSize = 22.sp

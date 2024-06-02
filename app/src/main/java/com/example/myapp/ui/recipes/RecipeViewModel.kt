@@ -1,6 +1,7 @@
 package com.example.myapp.ui.recipes
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.lifecycle.ViewModel
 import com.example.myapp.R
 import com.example.myapp.data.AppRepository
@@ -128,18 +129,15 @@ class RecipeViewModel(
         ),
         Recipe(
             8,
-            "Молочный коктейль",
+            "Стакан воды",
             "Напиток",
-            R.drawable.choco_coctail,
-            "1 час 15 минут",
-            listOf("Молоко", "Шоколад", "Сахар"),
-            300,
-            listOf(7, 27, 32),
+            R.drawable.water,
+            "0 минут",
+            listOf("Вода"),
+            80,
+            listOf(0, 0, 50),
             listOf("+"),
             listOf(
-                FilterNames.NO_MEAT.filterName,
-                FilterNames.PREGNANT.filterName,
-                FilterNames.LACTATION.filterName
             )
         ),
         Recipe(
@@ -179,17 +177,52 @@ class RecipeViewModel(
         ),
         Recipe(
             11,
-            "Мохито",
+            "Лимонад",
             "Напиток",
             R.drawable.mojito,
             "20 минут",
-            listOf("Лайм", "Текила", "Спрайт"),
+            listOf("Лайм", "Сахар", "Мята"),
             80,
             listOf(0, 0, 50),
             listOf("+"),
             listOf(
                 FilterNames.NO_MEAT.filterName,
-                FilterNames.NO_MILK.filterName
+                FilterNames.NO_MILK.filterName,
+                FilterNames.PREGNANT.filterName,
+                FilterNames.LACTATION.filterName
+            )
+        ),
+        Recipe(
+            12,
+            "Кофе",
+            "Напиток",
+            R.drawable.coffee,
+            "10 минут",
+            listOf("Зерна кофе", "Молоко"),
+            200,
+            listOf(13, 14, 1),
+            listOf("+"),
+            listOf(
+                FilterNames.NO_MEAT.filterName,
+                FilterNames.ALLERGY.filterName,
+                FilterNames.DIABETES.filterName,
+                FilterNames.FAT.filterName
+            )
+        ),
+        Recipe(
+            13,
+            "Молочный коктейль",
+            "Напиток",
+            R.drawable.choco_coctail,
+            "1 час 15 минут",
+            listOf("Молоко", "Шоколад", "Сахар"),
+            300,
+            listOf(7, 27, 32),
+            listOf("+"),
+            listOf(
+                FilterNames.NO_MEAT.filterName,
+                FilterNames.PREGNANT.filterName,
+                FilterNames.LACTATION.filterName
             )
         ),
     )
