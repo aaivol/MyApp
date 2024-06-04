@@ -1,6 +1,8 @@
 package com.example.myapp.ui.filters
 
 import android.text.Layout
+import android.util.Log
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,6 +27,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -49,6 +53,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.myapp.DataStoring
+import com.example.myapp.data.user_filter.enFilterToRu
 import com.example.myapp.data.user_filter.nameToBit
 import com.example.myapp.dataStore
 import com.example.myapp.ui.AppViewModelProvider
@@ -61,6 +66,7 @@ import com.example.myapp.ui.theme.orange
 import com.example.myapp.ui.theme.page
 import com.example.myapp.ui.theme.textAccent
 import com.example.myapp.ui.theme.textBlue
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 object FiltersDestination : NavigationDestination {
@@ -80,17 +86,23 @@ fun FiltersScreen(
         initial = DataStoring()
     ).value.user.name
 
-    //update username in viewmodel
-    viewmodel.updateName(usernameStored)
-    val userState = viewmodel.currentUser.value.userDetails
+    LaunchedEffect(key1 = usernameStored){
+        //update username in viewmodel
+        viewmodel.updateName(usernameStored)
+        Log.d("tag1", "username stored: $usernameStored")
+        viewmodel.getUser()
+        viewmodel.checkCurrentFilters()
+    }
+
     val coroutineScope = rememberCoroutineScope()
 
-    var selectedBits = remember {
-        mutableStateListOf<Int>()
-    }
+    //filters
+    val userFilters = viewmodel.currentFilters
+    var selectedBits = remember { mutableStateListOf<Int>() }
 
     FiltersBody(
         selectedBits,
+        userFilters,
         toHome = {
             coroutineScope.launch {
                 viewmodel.updateFilters(selectedBits)
@@ -103,7 +115,8 @@ fun FiltersScreen(
 @Composable
 fun FiltersBody(
     selectedBits: MutableList<Int>,
-    toHome: () -> Unit
+    userFilters: List<String>,
+    toHome: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -113,7 +126,8 @@ fun FiltersBody(
     ) {
         FiltersText()
         DietGoalButtons(
-            selectedBits
+            selectedBits,
+            userFilters
         )
         OutlinedButton(
             onClick = toHome,
@@ -152,7 +166,8 @@ fun FiltersText() {
 }
 @Composable
 fun DietGoalButtons(
-    selectedBits: MutableList<Int>
+    selectedBits: MutableList<Int>,
+    userFilters: List<String>
 ) {
     val filters = listOf(
         "Диабет",
@@ -171,8 +186,27 @@ fun DietGoalButtons(
     }
 
     val onSelectionChange = { filter: String ->
-        selectedFilters.add(filter)
-        selectedBits.add(filters.indexOf(filter))
+        if (!selectedFilters.contains(filter)){
+            selectedFilters.add(filter)
+            selectedBits.add(filters.indexOf(filter))
+        }
+    }
+
+
+    LaunchedEffect(key1 = userFilters){
+        Log.d("tag1", "on screen 2: $userFilters")
+        if (userFilters.isNotEmpty()){
+            selectedFilters.clear()
+            userFilters.forEach {
+                selectedFilters.add(enFilterToRu[it]!!)
+                val index = nameToBit[it]
+                if (index != null){
+                    selectedBits.add(index)
+                }
+            }
+            Log.d("tag1", selectedFilters.joinToString(" "))
+
+        }
     }
 
     Column(
@@ -193,6 +227,9 @@ fun DietGoalButtons(
                     if (isSelected) {
                         selectedFilters.remove(filter)
                         selectedBits.remove(filters.indexOf(filter))
+                        Log.d("tag1", selectedBits.joinToString(" "))
+                        Log.d("tag1", filter)
+                        Log.d("tag1", filters.indexOf(filter).toString())
                     }
                     else {
                         onSelectionChange(filter)

@@ -90,6 +90,7 @@ class HomeViewModel(
      */
     suspend fun checkCurrentFilters() {
         val currentFilter = appRepository.getCurrentFilters(_currentName.value)
+        Log.d("tag1", "in viewmodel: $currentFilter")
         FilterNames.values().forEach {
             val filterBit = currentFilter.getBit(nameToBit[it.name]!!)
             if (filterBit == 1){
@@ -101,6 +102,7 @@ class HomeViewModel(
     }
 
     suspend fun updateFilters(uiSelectedBits: MutableList<Int>) {
+        Log.d("tag1", "ui selected: ${uiSelectedBits.joinToString(" ")}")
         // filter Integer of current User
         val currentFilter = appRepository.getCurrentFilters(_currentName.value)
         var updatedFilter = 0
@@ -108,14 +110,15 @@ class HomeViewModel(
         FilterNames.values().forEach {
             // bit of each FilterNames value
             val currentBit = nameToBit[it.name]!!
+            Log.d("tag1", "bit: $currentBit , filter: $it")
 
             // if bit of current Filter Name is selected on UI
             val isSelected = uiSelectedBits.contains(currentBit)
-            if (isSelected) {
-               updatedFilter += currentFilter.setBit(currentBit, 1)
-            }
+            Log.d("tag1", "isSelected: $isSelected")
+            updatedFilter = updatedFilter.setBit(currentBit, if(isSelected) 1 else 0)
         }
 
+        Log.d("tag1", "updated filter: $updatedFilter")
         // push updates
         appRepository.updateFilters(_currentName.value, updatedFilter)
     }

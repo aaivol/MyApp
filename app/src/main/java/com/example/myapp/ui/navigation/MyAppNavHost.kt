@@ -58,7 +58,7 @@ fun MyAppNavHost(
         }
         composable(route = HomeDestination.route) {
             HomeScreen(
-                navigateToSettings = { navController.navigate(SettingsDestination.route) },
+                navigateToFilters = { navController.navigate(FiltersDestination.route) },
                 navigateToFood = { navController.navigate(FoodDestination.route) },
                 navigateToWater = { navController.navigate(WaterDestination.route) },
                 navigateToRecipes = { navController.navigate(RecipeDestination.route) }

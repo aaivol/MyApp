@@ -67,7 +67,7 @@ object HomeDestination : NavigationDestination {
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun HomeScreen(
-    navigateToSettings: () -> Unit,
+    navigateToFilters: () -> Unit,
     navigateToFood: () -> Unit,
     navigateToWater: () -> Unit,
     navigateToRecipes: () -> Unit,
@@ -103,7 +103,6 @@ fun HomeScreen(
                         //get properties from Room database
                         viewModel.getUser()
                         viewModel.checkCurrentFilters()
-                        //viewModel.startUserMeals()
                     }
                 },
                 userState,
@@ -119,7 +118,11 @@ fun HomeScreen(
                 navigateToWater()
             },
             toSettingsClick = {
-                navigateToSettings()
+                navigateToFilters()
+                coroutineScope.launch {
+                    viewModel.getUser()
+                    viewModel.checkCurrentFilters()
+                }
             },
             toRecipesClick = {
                 navigateToRecipes()

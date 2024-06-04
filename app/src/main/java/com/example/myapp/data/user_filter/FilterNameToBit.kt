@@ -20,7 +20,7 @@ fun Int.setBit(bit: Int, value: Int): Int {
     return if (value == 1) {
         this or (1 shl bit)
     } else {
-        this or (1 shl bit).inv()
+        this and (1 shl bit).inv()
     }
 }
 

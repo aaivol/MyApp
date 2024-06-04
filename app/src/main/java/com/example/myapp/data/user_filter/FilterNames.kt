@@ -11,3 +11,15 @@ enum class FilterNames(val filterName: String) {
     PREGNANT("PREGNANT"),
     LACTATION("LACTATION")
 }
+
+val enFilterToRu = mapOf(
+    FilterNames.DIABETES.name to "Диабет",
+    FilterNames.ALLERGY.name to "Аллергия",
+    FilterNames.FAT.name to "Ожирение",
+    FilterNames.GASTRITIS.name to "Гастрит",
+    FilterNames.NO_MEAT.name to "Без мяса",
+    FilterNames.VEGAN.name to "Веган",
+    FilterNames.NO_MILK.name to "Без молока",
+    FilterNames.PREGNANT.name to "Жду ребенка",
+    FilterNames.LACTATION.name to "Кормление",
+)
